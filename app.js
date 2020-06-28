@@ -17,9 +17,14 @@ app.get('/', (req, res) => {
 });
 
 //Connect to DB
-mongoose.connect(process.env.DB_CONNECTION, { useNewUrlParser: true }, () =>
-    console.log('connected to DB!')
+mongoose.connect(process.env.DB_CONNECTION, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+ },
+() => console.log('connected to DB!')
 );
 
 //How do we listen
-app.listen(3000);
+app.listen(3000, () => {
+    console.log(`Server running at http://localhost:3000`);
+});
