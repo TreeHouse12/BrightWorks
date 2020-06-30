@@ -19,6 +19,10 @@ app.get('/', (req, res) => {
     res.sendFile('index.html', { root: __dirname });
 });
 
+app.get('/home', (req, res) => {
+    res.sendFile('Home.html', { root: __dirname });
+});
+
 app.get('/registration', (req, res) => {
     res.sendFile('registration.html', { root: __dirname });
 });
