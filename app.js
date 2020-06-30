@@ -16,7 +16,11 @@ app.use('/posts', postsRoute);
 
 //ROUTES
 app.get('/', (req, res) => {
-    res.send('We are on home');
+    res.sendFile('index.html', { root: __dirname });
+});
+
+app.get('/registration', (req, res) => {
+    res.sendFile('registration.html', { root: __dirname });
 });
 
 //Connect to DB
