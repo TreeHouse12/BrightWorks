@@ -3,7 +3,7 @@ const router = express.Router();
 const User = require('../lib/User')
 
 //GET HOME PAGE
-router.get('/', function (req, res, next) {
+router.get('/register', function (req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
