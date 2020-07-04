@@ -21,7 +21,7 @@ router.post('/login', function (req, res) {
       return res.status(404).send();
     }
 
-    return res.send(200).sned();
+    return res.send(200).send();
   })
 });
 
