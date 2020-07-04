@@ -3,7 +3,6 @@ const app = express();
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const routes = require('./routes/index');
 require('dotenv/config');
 
 //Middlewares
@@ -11,9 +10,10 @@ app.use(cors());
 app.use(bodyParser.json());
 
 //Import ROUTES
+const routes = require('./routes/index');
 const postsRoute = require('./routes/posts');
 
-app.use('/register', routes);
+app.use('/', routes);
 app.use('/posts', postsRoute);
 
 //ROUTES
