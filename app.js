@@ -9,7 +9,7 @@ require('dotenv/config');
 //Middlewares
 app.use(cors());
 app.use(bodyParser.json());
-app.user({session:"asdfdffdf323rdcc",resave:false,saveUninitialized:true}));
+app.use(session({secret:"asdfdffdf323rdcc",resave:false,saveUninitialized:true}));
 //Import ROUTES
 const routes = require('./routes/index');
 const postsRoute = require('./routes/posts');
