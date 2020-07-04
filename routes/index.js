@@ -20,8 +20,8 @@ router.post('/login', function (req, res) {
     if(!user) {
       return res.status(404).send();
     }
-
-    return res.send(200).sned();
+    req.session.user = user;
+    return res.send(200).send();
   })
 });
 
@@ -52,7 +52,7 @@ router.post('/register', function (req,res) {
 
 //PERSIST USER PASS
 router.get('/dashboard', function (req, res) {
-  if(!loggedIn) {
+  if(!req.session.user) {
     return res.status(401).send();
   }
 

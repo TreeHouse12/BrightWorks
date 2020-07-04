@@ -3,12 +3,13 @@ const app = express();
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const session = require('express-session');
 require('dotenv/config');
 
 //Middlewares
 app.use(cors());
 app.use(bodyParser.json());
-
+app.use(session({secret:"asdfdffdf323rdcc",resave:false,saveUninitialized:true}));
 //Import ROUTES
 const routes = require('./routes/index');
 const postsRoute = require('./routes/posts');
