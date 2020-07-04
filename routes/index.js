@@ -20,7 +20,7 @@ router.post('/login', function (req, res) {
     if(!user) {
       return res.status(404).send();
     }
-
+    req.session.user = user;
     return res.send(200).send();
   })
 });
