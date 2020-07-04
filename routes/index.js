@@ -3,7 +3,7 @@ const router = express.Router();
 const User = require('../lib/User')
 
 //GET HOME PAGE
-router.get('/', function (req, res, next) {
+router.get('/register', function (req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
@@ -32,8 +32,8 @@ router.post('/register', function (req,res) {
   var lastname = req.body.lastname;
 
   var newuser = new User();
-  newuser.newuser = username;
-  newuser.newpassword = password;
+  newuser.username = username;
+  newuser.password = password;
   newuser.firstname = firstname;
   newuser.lastname = lastname;
   newuser.save(function(err, savedUser) {
@@ -42,7 +42,21 @@ router.post('/register', function (req,res) {
         return res.status(500).send();
       }
 
+      if(!user) {
+        return res.status(404).send();
+      }
+
       return res.status(200).send();
   })
+});
+
+//PERSIST USER PASS
+router.get('/dashboard', function (req, res) {
+  if(!loggedIn) {
+    return res.status(401).send();
+  }
+
+return res.status(200).send("Welcome to Super Secret Login");
 })
+
 module.exports = router;
