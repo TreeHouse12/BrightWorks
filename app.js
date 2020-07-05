@@ -16,10 +16,15 @@ const postsRoute = require('./routes/posts');
 
 app.use('/', routes);
 app.use('/posts', postsRoute);
+app.use(express.static('public'));
 
 //ROUTES
 app.get('/', (req, res) => {
     res.sendFile('index.html', { root: __dirname });
+});
+
+app.get('/home', (req, res) => {
+    res.sendFile('home.html', { root: __dirname });
 });
 
 app.get('/why_us', (req, res) => {
