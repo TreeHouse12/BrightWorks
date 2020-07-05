@@ -3,8 +3,14 @@ const router = express.Router();
 const User = require('../lib/User')
 
 //GET HOME PAGE
-router.get('/register', function (req, res, next) {
-  res.render('index', { title: 'Express' });
+router.get('/register', async (req, res, next) => {
+  //res.render('index', { title: 'Express' });
+  try {
+      const index = await User.find();
+      res.json(index);
+  } catch (err) {
+    res.json({ message: err });
+  }
 });
 
 router.post('/login', function (req, res) {
