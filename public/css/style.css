@@ -14,15 +14,22 @@
   z-index: -1;
 }
 #Logo {
-  grid-column: 2/3;
+
   font-size: 24px;
 }
 .hamburger {
   justify-self: end;
-  width: 10%;
+  float:right;
+  width: 7%;
   height: 10vh;
 }
 section {
   display: flex;
   height: 80vh;
+}
+
+.clean
+{
+    position: relative;
+    top: 60px;
 }
