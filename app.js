@@ -23,8 +23,8 @@ app.get('/', (req, res) => {
     res.sendFile('index.html', { root: __dirname });
 });
 
-app.get('/home', (req, res) => {
-    res.sendFile('home.html', { root: __dirname });
+app.get('/login', (req, res) => {
+    res.sendFile('login.html', { root: __dirname });
 });
 
 app.get('/why_us', (req, res) => {
