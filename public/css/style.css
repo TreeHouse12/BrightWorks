@@ -21,9 +21,11 @@ nav {
   align-items: center;
 }
 
-#Logo {
+#logo {
+  font: 55px Arial;
+  color: rgb(56,87,188);
   grid-column: 2/3;
-  font-size: 24px;
+
 }
 .hamburger {
   justify-self: end;
