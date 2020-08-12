@@ -4,6 +4,11 @@
   box-sizing: border-box;
 }
 
+.cleaningimage{
+        text-align: center;
+        padding: 15px 1em 0 2em;
+      }
+
 .slider {
   position:absolute;
   top: 0;
@@ -71,4 +76,24 @@ section {
   left: 0;
   opacity: 0.3;
   top: 0;
+}
+
+
+
+
+.navbar-brand
+{
+  font-family: 'Lato', sans-serif;
+  color:grey;
+  font-size: 4rem !important;
+  margin: 0px;
+}
+
+.nav-item{
+  font-size: 2rem !important
+}
+
+
+.navbar-nav{
+  font-size: 3rem !important
 }
