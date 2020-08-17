@@ -1,13 +1,18 @@
 const express = require('express');
-const app = express();
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const cors = require('cors');
+const expressHbs = require('express-handlebars');
+//const cors = require('cors');
 const session = require('express-session');
 require('dotenv/config');
+const app = express();
+
+//View Engine setup
+app.engine('.hbs', expressHbs({defaultLayout: 'layout', extname: '.hbs'}));
+app.set('view engine', '.hbs');
 
 //Middlewares
-app.use(cors());
+//app.use(cors());
 app.use(bodyParser.json());
 app.use(session({secret:"asdfdffdf323rdcc",resave:false,saveUninitialized:true}));
 //Import ROUTES
@@ -40,7 +45,8 @@ app.get('/reviews', (req, res) => {
 });
 
 app.get('/pricing', (req, res) => {
-    res.sendFile('pricing.html', { root: __dirname });
+    res.render('pricing', { title: 'Shopping Cart' });
+    //res.sendFile('pricing.html', { root: __dirname });
 });
 
 app.get('/registration', (req, res) => {
