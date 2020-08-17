@@ -45,7 +45,7 @@ app.get('/reviews', (req, res) => {
 });
 
 app.get('/pricing', (req, res) => {
-    res.render('pricing', { title: 'Shopping Cart' });
+    res.render('shop/pricing', { title: 'Shopping Cart' });
     //res.sendFile('pricing.html', { root: __dirname });
 });
 
