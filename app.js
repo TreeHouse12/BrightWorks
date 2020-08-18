@@ -5,6 +5,7 @@ const expressHbs = require('express-handlebars');
 //const cors = require('cors');
 const session = require('express-session');
 const Service = require('./models/service');
+const Cart = require('./models/cart');
 require('dotenv/config');
 const app = express();
 const Handlebars = require('handlebars')
@@ -57,6 +58,21 @@ app.get('/pricing', (req, res) => {
       res.render('shop/pricing', { title: 'Shopping Cart', services: serviceChunks });
     //res.sendFile('pricing.html', { root: __dirname });
     });
+});
+
+app.get('/add-to-cart/:id', (req, res) => {
+   const serviceId = req.params.id;
+   const cart = new Cart(req.session.cart ? req.session.cart : {});
+
+   Service.findById(serviceId, function(err, service) {
+      if (err) {
+        return res.redirect('/pricing');
+      }
+      cart.add(service, service.id);
+      req.session.cart = cart;
+      console.log(req.session.cart)
+      res.redirect('/pricing');
+   });
 });
 
 app.get('/registration', (req, res) => {
