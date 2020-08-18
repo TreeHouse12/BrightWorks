@@ -4,11 +4,14 @@ const bodyParser = require('body-parser');
 const expressHbs = require('express-handlebars');
 //const cors = require('cors');
 const session = require('express-session');
+const Service = require('./models/service');
 require('dotenv/config');
 const app = express();
+const Handlebars = require('handlebars')
+const {allowInsecurePrototypeAccess} = require('@handlebars/allow-prototype-access')
 
 //View Engine setup
-app.engine('.hbs', expressHbs({defaultLayout: 'layout', extname: '.hbs'}));
+app.engine('.hbs', expressHbs({defaultLayout: 'layout', extname: '.hbs', handlebars: allowInsecurePrototypeAccess(Handlebars)}));
 app.set('view engine', '.hbs');
 
 //Middlewares
@@ -45,8 +48,15 @@ app.get('/reviews', (req, res) => {
 });
 
 app.get('/pricing', (req, res) => {
-    res.render('shop/pricing', { title: 'Shopping Cart' });
+    Service.find(function(err, docs) {
+      const serviceChunks = [];
+      const chunkSize = 3;
+      for (var i = 0; i < docs.length; i += chunkSize) {
+        serviceChunks.push(docs.slice(i, i + chunkSize));
+      }
+      res.render('shop/pricing', { title: 'Shopping Cart', services: serviceChunks });
     //res.sendFile('pricing.html', { root: __dirname });
+    });
 });
 
 app.get('/registration', (req, res) => {
