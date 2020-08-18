@@ -2,31 +2,32 @@ var Service = require('../models/service');
 
 var mongoose = require('mongoose');
 //Connect to DB
-mongoose.connect(process.env.DB_CONNECTION, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useCreateIndex: true
- },
-() => console.log('reconnected to DB for Shopping!')
+mongoose.connect('mongodb+srv://testboy:Rhino94@cluster0-a7yut.mongodb.net/test?retryWrites=true&w=majority',
+{
+useNewUrlParser: true,
+useUnifiedTopology: true,
+useCreateIndex: true
+},
+() => console.log('connected to DB for Shopping Cart!')
 );
 
-var service = [
+var services = [
     new Service({
         imagePath: '/images/deck2.jpeg',
         title: 'Deck Pressure Washing',
-        description: 'Very Clean Desk!!!!!',
+        description: 'Have your deck power washed with detergent and full rinse',
         price: 100
     }),
     new Service({
         imagePath: '/images/driveway2.jpeg',
         title: 'Driveway Pressure Washing',
-        description: 'Extremely Clean Driveway!!!!!',
+        description: 'Have your driveway power washed with a the amazing surface scrubber',
         price: 150
     }),
     new Service({
         imagePath: '/images/house1.jpeg',
         title: 'House Pressure Washing',
-        description: 'Exceptionally Clean House!!!!!',
+        description: 'Have your house softwashed with detergent and rinse',
         price: 350
     }),
 ];
@@ -42,5 +43,5 @@ for (var i =0; i < services.length; i++) {
 }
 
 function exit() {
-  mongoose.disconnnect();
+  mongoose.disconnect();
 }
