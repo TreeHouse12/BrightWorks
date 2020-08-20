@@ -85,6 +85,7 @@ mongoose.connect(process.env.DB_CONNECTION, {
  },
 () => console.log('connected to DB!')
 );
+require('./config/passport')
 
 //How do we listen
 app.listen(3000, () => {
