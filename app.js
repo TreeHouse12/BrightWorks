@@ -4,6 +4,9 @@ const bodyParser = require('body-parser');
 const expressHbs = require('express-handlebars');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+const passport = require('passport')
+const flash = require('connect-flash')
+const Service = require('./models/service');
 const Cart = require('./models/cart');
 require('dotenv/config');
 const app = express();
@@ -19,6 +22,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(session({secret:"asdfdffdf323rdcc",resave:false,saveUninitialized:false}));
+app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
 //Import ROUTES
 const routes = require('./routes/index');
 const postsRoute = require('./routes/posts');
@@ -79,6 +85,7 @@ mongoose.connect(process.env.DB_CONNECTION, {
  },
 () => console.log('connected to DB!')
 );
+require('./config/passport')
 
 //How do we listen
 app.listen(3000, () => {
