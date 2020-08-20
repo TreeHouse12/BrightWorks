@@ -1,14 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const Service = require('../models/service');
-const User = require('../lib/User')
 const csrf = require('csurf');
 
 var csrfProtection = csrf();
 router.use(csrfProtection);
 
 //GET HOME PAGE
-router.get('/pricing', async (req, res, next) => {
+router.get('/pricing', function (req, res, next) {
   Service.find(function(err, docs) {
     var serviceChunks = [];
     var chunkSize = 3;
@@ -19,8 +18,12 @@ router.get('/pricing', async (req, res, next) => {
   });
 });
 
-router.get('user/signup', function(req, res, next) {
-  res.render('user/signup', {csrfToken: req.csrfToken()});
+router.get('/user/signup', function (req, res, next) {
+  res.render('../user/signup', {csrfToken: req.csrfToken()});
+});
+
+router.post('/user/signup', function (req, res, next) {
+  res.redirect('/pricing');
 });
 
 module.exports = router;
