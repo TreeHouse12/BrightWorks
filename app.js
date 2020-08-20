@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const expressHbs = require('express-handlebars');
-//const cors = require('cors');
+const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const Cart = require('./models/cart');
 require('dotenv/config');
@@ -17,7 +17,8 @@ app.set('view engine', '.hbs');
 //Middlewares
 //app.use(cors());
 app.use(bodyParser.json());
-app.use(session({secret:"asdfdffdf323rdcc",resave:false,saveUninitialized:true}));
+app.use(cookieParser());
+app.use(session({secret:"asdfdffdf323rdcc",resave:false,saveUninitialized:false}));
 //Import ROUTES
 const routes = require('./routes/index');
 const postsRoute = require('./routes/posts');
@@ -46,10 +47,6 @@ app.get('/contact_us', (req, res) => {
 app.get('/reviews', (req, res) => {
     res.sendFile('reviews.html', { root: __dirname });
 });
-
-//app.get('/pricing', (req, res) => {
-    //res.sendFile('pricing.html', { root: __dirname });
-//});
 
 app.get('/add-to-cart/:id', (req, res) => {
    const serviceId = req.params.id;

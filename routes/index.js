@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const Service = require('../models/service');
-const User = require('../lib/User')
 const csrf = require('csurf');
 
 var csrfProtection = csrf();
