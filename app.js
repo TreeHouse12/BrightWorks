@@ -15,8 +15,8 @@ app.engine('.hbs', expressHbs({defaultLayout: 'layout', extname: '.hbs', handleb
 app.set('view engine', '.hbs');
 
 //Middlewares
-//app.use(cors());
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(session({secret:"asdfdffdf323rdcc",resave:false,saveUninitialized:false}));
 //Import ROUTES
