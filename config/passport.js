@@ -13,9 +13,9 @@ passport.deserializeUser(function(id, done) {
 });
 
 passport.use('local.signup', new LocalStrategy({
-  usernameField: 'email',
-  passwordField: 'password',
-  passReqToCallback: true
+    usernameField: 'email',
+    passwordField: 'password',
+    passReqToCallback: true
 }, function(req, email, password, done) {
     User.findOne({'email': email}, function(err, user) {
       if (err) {
@@ -25,11 +25,13 @@ passport.use('local.signup', new LocalStrategy({
         return done(null, false, {message: 'Email is already in use.'});
       }
       var newUser = new User();
-       newUser.email = email;
-       newUser.password = newUser.encryptPassword(password);
-       if (err) {
-         return done(err);
-       }
-       return done(null, newUser);
+      newUser.email = email;
+      newUser.password = newUser.encryptPassword(password);
+      newUser.save(function(err, result) {
+         if (err) {
+          return done(err);
+         }
+         return done(null, newUser);
+      })
     });
-  }));
+}));
