@@ -4,7 +4,6 @@ const bodyParser = require('body-parser');
 const expressHbs = require('express-handlebars');
 //const cors = require('cors');
 const session = require('express-session');
-const Service = require('./models/service');
 const Cart = require('./models/cart');
 require('dotenv/config');
 const app = express();
@@ -48,17 +47,9 @@ app.get('/reviews', (req, res) => {
     res.sendFile('reviews.html', { root: __dirname });
 });
 
-app.get('/pricing', (req, res) => {
-    Service.find(function(err, docs) {
-      const serviceChunks = [];
-      const chunkSize = 3;
-      for (var i = 0; i < docs.length; i += chunkSize) {
-        serviceChunks.push(docs.slice(i, i + chunkSize));
-      }
-      res.render('shop/pricing', { title: 'Shopping Cart', services: serviceChunks });
+//app.get('/pricing', (req, res) => {
     //res.sendFile('pricing.html', { root: __dirname });
-    });
-});
+//});
 
 app.get('/add-to-cart/:id', (req, res) => {
    const serviceId = req.params.id;

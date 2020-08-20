@@ -8,7 +8,7 @@ module.exports = function Cart(oldCart) {
       storedItem = this.items[id] = {item: item, price: 0};
     }
     storedItem.price = storedItem.item.price;
-    this.totalPrice += storedItem.price;
+    this.totalPrice += storedItem.item.price;
   };
 
   this.generateArray = function() {
