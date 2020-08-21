@@ -13,11 +13,21 @@ passport.deserializeUser(function(id, done) {
 });
 
 passport.use('local.signup', new LocalStrategy({
-    usernameField: 'email',
+    usernameField: 'username',
     passwordField: 'password',
     passReqToCallback: true
-}, function(req, email, password, done) {
-    User.findOne({'email': email}, function (err, user) {
+}, function(req, username, password, done) {
+    req.checkBody('username', 'Invalid Email').notEmpty().isEmail();
+    req.checkBody('password', 'Your password must be at least 8 characters').notEmpty().isLength({min:8});
+    var errors = req.validationErrors();
+    if (errors) {
+      var messages = [];
+      errors.forEach(function(error) {
+        messages.push(error.msg);
+      });
+      return done(null, false, req.flash('error', messages));
+    }
+    User.findOne({'username': username}, function (err, user) {
         if (err) {
             return done(err);
         }
@@ -25,7 +35,7 @@ passport.use('local.signup', new LocalStrategy({
             return done(null, false, {message: 'Email already in use.'});
         }
         var newUser = new User();
-        newUser.email = email;
+        newUser.username = username;
         newUser.password = newUser.encryptPassword(password);
         newUser.save(function(err, result) {
           if (err) {
@@ -33,5 +43,34 @@ passport.use('local.signup', new LocalStrategy({
           }
           return done(null, newUser);
         });
+    });
+}));
+
+passport.use('local.signin', new LocalStrategy({
+  usernameField: 'username',
+  passwordField: 'password',
+  passReqToCallback: true
+}, function(req, username, password, done) {
+    req.checkBody('username', 'Invalid Email').notEmpty().isEmail();
+    req.checkBody('password', 'Invalid Password').notEmpty();
+    var errors = req.validationErrors();
+    if (errors) {
+      var messages = [];
+      errors.forEach(function(error) {
+        messages.push(error.msg);
+      });
+      return done(null, false, req.flash('error', messages));
+    }
+    User.findOne({'username': username}, function (err, user) {
+        if (err) {
+            return done(err);
+        }
+        if (!user) {
+            return done(null, false, {message: 'No user found.'});
+        }
+        if (!user.validPassword(password)) {
+          return done(null, false, {message: 'Wrong password.'});
+        }
+        return done(null, user);
     });
 }));
