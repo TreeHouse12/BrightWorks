@@ -14,7 +14,7 @@ router.use('/', notLoggedIn, function(req, res, next) {
   next();
 });
 
-router.get('/user/signup', function (req, res, next) {
+router.get('/signup', function (req, res, next) {
   var messages = req.flash('error');
   res.render('user/signup', {csrfToken: req.csrfToken(), messages :messages, hasErrors: messages.length > 0});
 });
