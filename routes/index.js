@@ -3,7 +3,7 @@ const router = express.Router();
 const Service = require('../models/service');
 
 //GET HOME PAGE
-router.get('/pricing', function (req, res, next) {
+router.get('/', function (req, res, next) {
   Service.find(function(err, docs) {
     var serviceChunks = [];
     var chunkSize = 3;
