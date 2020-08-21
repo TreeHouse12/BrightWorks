@@ -15,10 +15,13 @@
           <i class="fa fa-user" aria-hidden="true"></i> User Management
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          {{#if login }}
             <a class="dropdown-item" href="/user/profile">User Account</a>
             <a class="dropdown-item" href="/user/logout">Logout</a>
+          {{ else }}
             <a class="dropdown-item" href="/user/signup">Sign Up</a>
             <a class="dropdown-item" href="/user/signin">Sign In</a>
+          {{/if}}
         </div>
       </li>
     </ul>

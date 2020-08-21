@@ -27,6 +27,11 @@ app.use(session({secret:"asdfdffdf323rdcc",resave:false,saveUninitialized:false}
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(function(req, res, next) {
+  res.locals.login = req.isAuthenticated();
+  next();
+});
+
 //Import ROUTES
 const userRoutes = require('./routes/user');
 const routes = require('./routes/index');
