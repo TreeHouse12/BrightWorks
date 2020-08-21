@@ -4,13 +4,14 @@ const bodyParser = require('body-parser');
 const expressHbs = require('express-handlebars');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
-const passport = require('passport')
-const flash = require('connect-flash')
+const passport = require('passport');
+const flash = require('connect-flash');
 const Service = require('./models/service');
 const Cart = require('./models/cart');
+const validate = require('express-validator');
 require('dotenv/config');
 const app = express();
-const Handlebars = require('handlebars')
+const Handlebars = require('handlebars');
 const {allowInsecurePrototypeAccess} = require('@handlebars/allow-prototype-access')
 
 //View Engine setup
@@ -20,6 +21,7 @@ app.set('view engine', '.hbs');
 //Middlewares
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(validate());
 app.use(cookieParser());
 app.use(session({secret:"asdfdffdf323rdcc",resave:false,saveUninitialized:false}));
 app.use(flash());
