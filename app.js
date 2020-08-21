@@ -27,10 +27,17 @@ app.use(session({secret:"asdfdffdf323rdcc",resave:false,saveUninitialized:false}
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(function(req, res, next) {
+  res.locals.login = req.isAuthenticated();
+  next();
+});
+
 //Import ROUTES
+const userRoutes = require('./routes/user');
 const routes = require('./routes/index');
 const postsRoute = require('./routes/posts');
 
+app.use('/user', userRoutes);
 app.use('/', routes);
 app.use('/posts', postsRoute);
 app.use(express.static('public'));
