@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const csrf = require('csurf');
 const passport = require('passport');
-
 const Service = require('../models/service');
 
 var csrfProtection = csrf();
@@ -22,7 +21,7 @@ router.get('/pricing', function (req, res, next) {
 
 router.get('/user/signup', function (req, res, next) {
   var messages = req.flash('error');
-  res.render('../user/signup', {csrfToken: req.csrfToken(), messages :messages, hasErrors: messages.length > 0});
+  res.render('user/signup', {csrfToken: req.csrfToken(), messages :messages, hasErrors: messages.length > 0});
 });
 
 router.post('/user/signup', passport.authenticate('local.signup', {
@@ -32,7 +31,7 @@ router.post('/user/signup', passport.authenticate('local.signup', {
 }));
 
 router.get('/user/profile', function (req, res, next) {
-  res.render('../user/profile');
+  res.render('user/profile');
 });
 
 module.exports = router;
