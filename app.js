@@ -43,9 +43,9 @@ app.use('/posts', postsRoute);
 app.use(express.static('public'));
 
 //ROUTES
-app.get('/', (req, res) => {
-    res.sendFile('index.html', { root: __dirname });
-});
+//app.get('/', (req, res) => {
+//    res.sendFile('index.html', { root: __dirname });
+//});
 
 app.get('/login', (req, res) => {
     res.sendFile('login.html', { root: __dirname });
@@ -53,6 +53,10 @@ app.get('/login', (req, res) => {
 
 app.get('/why_us', (req, res) => {
     res.sendFile('why_us.html', { root: __dirname });
+});
+
+app.get('/residential', (req, res) => {
+    res.sendFile('residential.html', { root: __dirname });
 });
 
 app.get('/contact_us', (req, res) => {
@@ -69,12 +73,12 @@ app.get('/add-to-cart/:id', (req, res) => {
 
    Service.findById(serviceId, function(err, service) {
       if (err) {
-        return res.redirect('/pricing');
+        return res.redirect('/');
       }
       cart.add(service, service.id);
       req.session.cart = cart;
       console.log(req.session.cart)
-      res.redirect('/pricing');
+      res.redirect('/');
    });
 });
 
