@@ -13,23 +13,21 @@ passport.deserializeUser(function(id, done) {
 });
 
 passport.use('local.signup', new LocalStrategy({
-    usernameField: 'email',
+    usernameField: 'username',
     passwordField: 'password',
     passReqToCallback: true
-}, function(req, email, password, done) {
-    req.check('email', 'Invalid Email').notEmpty().isEmail();
-    req.check('password', 'Your password must be at least 5 characters').notEmpty().isLength({min:5});
-    var errors = validationErrors();
+}, function(req, username, password, done) {
+    req.checkBody('username', 'Invalid Email').notEmpty().isEmail();
+    req.checkBody('password', 'Your password must be at least 5 characters').notEmpty().isLength({min:5});
+    var errors = req.validationErrors();
     if (errors) {
       var messages = [];
       errors.forEach(function(error) {
-        console.log(error.msg);
         messages.push(error.msg);
       });
-      console.log(messages);
       return done(null, false, req.flash('error', messages));
     }
-    User.findOne({'email': email}, function (err, user) {
+    User.findOne({'username': username}, function (err, user) {
         if (err) {
             return done(err);
         }
@@ -37,7 +35,7 @@ passport.use('local.signup', new LocalStrategy({
             return done(null, false, {message: 'Email already in use.'});
         }
         var newUser = new User();
-        newUser.email = email;
+        newUser.username = username;
         newUser.password = newUser.encryptPassword(password);
         newUser.save(function(err, result) {
           if (err) {
