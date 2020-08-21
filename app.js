@@ -28,9 +28,11 @@ app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 //Import ROUTES
+const userRoutes = require('./routes/user');
 const routes = require('./routes/index');
 const postsRoute = require('./routes/posts');
 
+app.use('/user', userRoutes);
 app.use('/', routes);
 app.use('/posts', postsRoute);
 app.use(express.static('public'));
