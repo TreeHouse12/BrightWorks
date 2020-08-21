@@ -9,6 +9,7 @@ const flash = require('connect-flash');
 const Service = require('./models/service');
 const Cart = require('./models/cart');
 const validate = require('express-validator');
+const MongoStone = require('connnect-mongo')(session);
 require('dotenv/config');
 const app = express();
 const Handlebars = require('handlebars');
@@ -23,7 +24,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(validate());
 app.use(cookieParser());
-app.use(session({secret:"asdfdffdf323rdcc",resave:false,saveUninitialized:false}));
+app.use(session({
+  secret:"asdfdffdf323rdcc",
+  resave:false,
+  saveUninitialized:false,
+  store: new MongoStore({ mongooseConnection: mongoose.connection }),
+  cookie { maxAge: 180 * 60 * 1000 }
+}));
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
