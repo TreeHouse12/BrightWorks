@@ -14,4 +14,8 @@ router.get('/', function (req, res, next) {
   });
 });
 
+router.get('/add-to-chart/:id', function(req, res, next) {
+  var ProductId = req.parms.id;
+
+});
 module.exports = router;
