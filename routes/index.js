@@ -35,7 +35,7 @@ router.get('/shopping-cart', function(req, res, next) {
     return res.render('shop/shopping-cart', {services: null});
   }
   var cart = new Cart(req.session.cart);
-  res.render('shop/shopping-cart', {service: cart.generateArray(), totalPrice: cart.totalPrice});
+  res.render('shop/shopping-cart', {services: cart.generateArray(), totalPrice: cart.totalPrice});
 });
 
 module.exports = router;
