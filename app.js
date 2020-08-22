@@ -34,6 +34,7 @@ app.use(session({
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(express.static('public'));
 app.use(function(req, res, next) {
   res.locals.login = req.isAuthenticated();
   res.locals.session = req.session;
@@ -48,7 +49,6 @@ const postsRoute = require('./routes/posts');
 app.use('/user', userRoutes);
 app.use('/', routes);
 app.use('/posts', postsRoute);
-app.use(express.static('public'));
 
 //ROUTES
 //app.get('/', (req, res) => {
