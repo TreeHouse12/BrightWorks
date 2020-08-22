@@ -18,12 +18,13 @@ router.get('/add-to-chart/:id', function(req, res, next) {
   var ProductId = req.parms.id;
   var cart = new Chart(req.session.cart ? req.session.cart : {});
 
-  Service.findById(serviceId, function(err,service) {
+  Service.findById(serviceId, function(err, service) {
     if (err) {
         return res.redirect('/');
     }
     cart.add(service,  service.id);
     req.session.cart = cart;
+    console.log(req.session.cart);
     res.redirect('/');
   });
 });
