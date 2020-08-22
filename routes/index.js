@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Service = require('../models/service');
+const Cart = require('../models/cart');
 
 //GET HOME PAGE
 router.get('/', function (req, res, next) {
@@ -11,6 +12,21 @@ router.get('/', function (req, res, next) {
       serviceChunks.push(docs.slice(i, i + chunkSize));
     }
     res.render('shop/pricing', { title: 'Shopping Cart', services: serviceChunks });
+  });
+});
+
+router.get('/add-to-chart/:id', function(req, res, next) {
+  var ProductId = req.parms.id;
+  var cart = new Cart(req.session.cart ? req.session.cart : {});
+
+  Service.findById(serviceId, function(err, service) {
+    if (err) {
+        return res.redirect('/');
+    }
+    cart.add(service,  service.id);
+    req.session.cart = cart;
+    console.log(req.session.cart);
+    res.redirect('/');
   });
 });
 
