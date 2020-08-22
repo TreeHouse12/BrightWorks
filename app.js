@@ -9,7 +9,7 @@ const flash = require('connect-flash');
 const Service = require('./models/service');
 const Cart = require('./models/cart');
 const validate = require('express-validator');
-const MongoStone = require('connnect-mongo')(session);
+const MongoStore = require('connect-mongo')(session);
 require('dotenv/config');
 const app = express();
 const Handlebars = require('handlebars');
