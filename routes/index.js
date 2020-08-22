@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Service = require('../models/service');
+const Cart = require('../models/cart');
 
 //GET HOME PAGE
 router.get('/', function (req, res, next) {
@@ -16,7 +17,7 @@ router.get('/', function (req, res, next) {
 
 router.get('/add-to-chart/:id', function(req, res, next) {
   var ProductId = req.parms.id;
-  var cart = new Chart(req.session.cart ? req.session.cart : {});
+  var cart = new Cart(req.session.cart ? req.session.cart : {});
 
   Service.findById(serviceId, function(err, service) {
     if (err) {
