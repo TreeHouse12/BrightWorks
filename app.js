@@ -9,7 +9,7 @@ const flash = require('connect-flash');
 const Service = require('./models/service');
 const Cart = require('./models/cart');
 const validate = require('express-validator');
-const MongoStone = require('connnect-mongo')(session);
+const MongoStore = require('connect-mongo')(session);
 require('dotenv/config');
 const app = express();
 const Handlebars = require('handlebars');
@@ -29,7 +29,7 @@ app.use(session({
   resave:false,
   saveUninitialized:false,
   store: new MongoStore({ mongooseConnection: mongoose.connection }),
-  cookie { maxAge: 180 * 60 * 1000 }
+  cookie: { maxAge: 180 * 60 * 1000 }
 }));
 app.use(flash());
 app.use(passport.initialize());
