@@ -38,7 +38,7 @@ router.get('/shopping-cart', function(req, res, next) {
   res.render('shop/shopping-cart', {services: cart.generateArray(), totalPrice: cart.totalPrice});
 });
 
-router.get.('/checkout', function(req, res, next) {
+router.get('/checkout', function(req, res, next) {
   if (!req.session.cart) {
     return res.redirect('/shopping-cart');
   }
