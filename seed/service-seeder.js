@@ -12,10 +12,19 @@ useCreateIndex: true
 );
 
 var services = [
-    new Service({
+
+      new Service({
+         imagePath: '/images/house1.jpeg',
+         title: 'House Washing',
+         description: 'At Brightworks Maintenance we aim to make the exterior of your house look immaculate. Our products will protect your home from mold and mildew. Most Houses under 1500 sq ft we charge $100',
+         price: 100
+       }),
+
+
+      new Service({
         imagePath: '/images/deck2.jpeg',
         title: 'Deck Pressure Washing',
-        description: 'Have your deck power washed with detergent and full rinse',
+        description: 'Decks washed with detergent and full rinse',
         price: 100
     }),
     new Service({
@@ -25,11 +34,37 @@ var services = [
         price: 150
     }),
     new Service({
-        imagePath: '/images/house1.jpeg',
+        imagePath: '/images/foamcannon1.jpg',
         title: 'House Pressure Washing',
-        description: 'Have your house softwashed with detergent and rinse',
+        description: 'Have a dirty car and don\'t have the time to clean it ? No worries we have you covered.We\'ll come to your home or place of work and clean and detail your vehicle at a reasonable price.',
         price: 350
-    }),
+      }),
+
+    new Service({
+        imagePath: '/images/gutter1.jpg',
+        title: 'Gutter Cleaning',
+        description: 'Debris in your gutters can cause problems for rainwater to drain properly. We can clear and clean your gutters.',
+        price: 350
+      }),
+
+    new Service({
+        imagePath: '/images/interior1.jpeg',
+        title: 'House Painting',
+        description: 'Brightworks also does interior painting.',
+        price: 350
+      }),
+    new Service({
+        imagePath: '/images/FleetWashing1.jpg',
+        title: 'Fleet Washing',
+        description: 'We provide fleet washing to keep your trucks sparkling clean.',
+        price: 350
+      }),
+    new Service({
+        imagePath: '/images/DeckStain1.jpg',
+        title: 'Deck Staining',
+        description: 'Staining a deck not only adds to the allure but also value to your home.',
+        price: 350
+          }),
 ];
 
 var done = 0;
