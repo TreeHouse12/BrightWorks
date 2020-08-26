@@ -24,7 +24,7 @@ var services = [
       new Service({
         imagePath: '/images/deck2.jpeg',
         title: 'Deck Pressure Washing',
-        description: 'Decks washed with detergent and full rinse',
+        description: 'Keeping your deck clean not only looks better but also protects from rotting and greying.',
         price: 100
     }),
     new Service({
@@ -41,7 +41,7 @@ var services = [
       }),
 
     new Service({
-        imagePath: '/images/gutter1.jpg',
+        imagePath: '/images/house1.jpeg',
         title: 'Gutter Cleaning',
         description: 'Debris in your gutters can cause problems for rainwater to drain properly. We can clear and clean your gutters.',
         price: 350
@@ -54,7 +54,7 @@ var services = [
         price: 350
       }),
     new Service({
-        imagePath: '/images/FleetWashing1.jpg',
+        imagePath: '/images/foamcannon1.jpg',
         title: 'Fleet Washing',
         description: 'We provide fleet washing to keep your trucks sparkling clean.',
         price: 350
