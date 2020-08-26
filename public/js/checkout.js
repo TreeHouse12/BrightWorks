@@ -24,7 +24,8 @@ function stripeResponseHandler(status, response) {
   if (response.error) { // Problem!
 
     // Show the errors on the form
-    $form.find('#charge-error').text(response.error.message);
+    $('#charge-error').text(response.error.message);
+    $('#charge-error').removeClass('hidden');
     $form.find('button').prop('disabled', false); // Re-enable submission
 
   } else { // Token was created!
