@@ -9,13 +9,14 @@ var elements = stripe.elements();
 var $form = $('#checkout-form');
 
 $form.submit(function(event) {
+  $('#charge-error').addClass('hidden');
   $form.find('button').prop('disabled', true);
   Stripe.card.createToken({
-    number: $('.card-number').val(),
-    cvc: $('.card-cvc').val(),
-    exp_month: $('.card-expiry-month').val(),
-    exp_year: $('.card-expiry-year').val(),
-    name: $('.card_name').val()
+    number: $('#card-number').val(),
+    cvc: $('#card-cvc').val(),
+    exp_month: $('#card-expiry-month').val(),
+    exp_year: $('#card-expiry-year').val(),
+    name: $('#card_name').val()
   }, stripeResponseHandler);
   return false
 });
