@@ -1,16 +1,11 @@
-var stripe = Stripe('pk_test_51HJ5XEKBSotCa0cl903XXdpCBIeWGXnB5zJKg4OACpJCVyPizdE6fSpxpJbVGoq1fcI0vWzFf1c3tnwSuAEczdcE00Uh3Nk3C7');
-var elements = stripe.elements();
-
-//var card = elements.create('card');
-
-// Add an instance of the card UI component into the `card-element` <div>
-// card.mount('#checkout-form');
+Stripe.setPublishableKey('pk_test_51HJ5XEKBSotCa0cl903XXdpCBIeWGXnB5zJKg4OACpJCVyPizdE6fSpxpJbVGoq1fcI0vWzFf1c3tnwSuAEczdcE00Uh3Nk3C7');
 
 var $form = $('#checkout-form');
 
 $form.submit(function(event) {
   $('#charge-error').addClass('hidden');
   $form.find('button').prop('disabled', true);
+  Stripe.setPublishableKey($form.data('pk_test_51HJ5XEKBSotCa0cl903XXdpCBIeWGXnB5zJKg4OACpJCVyPizdE6fSpxpJbVGoq1fcI0vWzFf1c3tnwSuAEczdcE00Uh3Nk3C7'));
   Stripe.card.createToken({
     number: $('#card-number').val(),
     cvc: $('#card-cvc').val(),
