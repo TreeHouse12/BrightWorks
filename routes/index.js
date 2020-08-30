@@ -68,11 +68,9 @@ router.post('/checkout', isLoggedIn, function(req, res, next) {
             req.flash('error', err.message);
             return res.redirect('/checkout');
         }
-        order.save(function(err, result) {
-           req.flash('success', 'Successfully bought product!');
-           req.session.cart = null;
-           res.redirect('/');
-       });
+        req.flash('success', "Successfully bought product!");
+        req.cart = null;
+        res.redirect('/');
     });
 });
 
