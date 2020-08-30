@@ -18,7 +18,7 @@ router.get('/', function (req, res, next) {
 });
 
 router.get('/add-to-chart/:id', function(req, res, next) {
-  var serviceId = req.parms.id;
+  var serviceId = req.params.id;
   var cart = new Cart(req.session.cart ? req.session.cart : {});
 
   Service.findById(serviceId, function(err, service) {
@@ -30,6 +30,24 @@ router.get('/add-to-chart/:id', function(req, res, next) {
     console.log(req.session.cart);
     res.redirect('/');
   });
+});
+
+router.get('/reduce/:id', function(req, res, next) {
+  var serviceId = req.params.id;
+  var cart = new Cart(req.session.cart ? req.session.cart : {});
+
+  cart.reduceByOne(serviceId);
+  req.session.cart = cart;
+  res.redirect('/shopping-cart')
+});
+
+router.get('/remove/:id', function(req, res, next) {
+  var serviceId = req.params.id;
+  var cart = new Cart(req.session.cart ? req.session.cart : {});
+
+  cart.removeItem(serviceId);
+  req.session.cart = cart;
+  res.redirect('/shopping-cart')
 });
 
 router.get('/shopping-cart', function(req, res, next) {
