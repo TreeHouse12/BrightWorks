@@ -1,0 +1,42 @@
+{
+  "music": [
+    {
+      "id": 1,
+      "name": "House Washing",
+      "price": 1299,
+      "imgName": "house1.jpeg"
+    },
+    {
+      "id": 2,
+      "name": "Driveway Washing",
+      "price": 1499,
+      "imgName": "driveway2.jpeg"
+    },
+    {
+      "id": 3,
+      "name": "Deck Washing",
+      "price": 999,
+      "imgName": "deck2.jpeg"
+    },
+    {
+      "id": 4,
+      "name": "House Painting",
+      "price": 1999,
+      "imgName": "interior1.jpeg"
+    }
+  ],
+  "merch": [
+    {
+      "id": 5,
+      "name": "T-Shirt",
+      "price": 1999,
+      "imgName": "Shirt.png"
+    },
+    {
+      "id": 6,
+      "name": "Coffee Cup",
+      "price": 699,
+      "imgName": "Cofee.png"
+    }
+  ]
+}
