@@ -68,7 +68,7 @@ router.post('/checkout', isLoggedIn, function(req, res, next) {
             req.flash('error', err.message);
             return res.redirect('/checkout');
         }
-        req.flash('success', "Successfully bought product!");
+        req.flash('success', 'Successfully bought product!');
         req.cart = null;
         res.redirect('/');
     });
