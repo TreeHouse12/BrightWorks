@@ -29,7 +29,17 @@ router.get('/contact', function (req, res, next) {
 });
 
 router.post('/send', function (req, res, next) {
-  console.log(req.body);
+  const output = `
+  <p>You have a new contact request</p>
+    <h3>Contact Details</h3>
+    <ul>
+      <li>Name: ${req.body.name}</li>
+      <li>Email: ${req.body.email}</li>
+      <li>Phone: ${req.body.phone}</li>
+    </ul>
+    <h3>Message</h3>
+    <p>${req.body.message}</p>
+  `;
 });
 
 router.get('/logout', isLoggedIn, function (req, res, next) {
