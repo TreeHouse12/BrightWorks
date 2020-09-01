@@ -80,8 +80,7 @@ router.post('/checkout', isLoggedIn, function(req, res, next) {
     stripe.charges.create({
         amount: cart.totalPrice * 100,
         currency: "usd",
-        source: req.body.stripeToken, // obtained with Stripe.js
-        //source: "tok_mastercard", // obtained with Stripe.js
+        source: "tok_mastercard", // obtained with Stripe.js
         description: "Test Charge"
     }, function(err, charge) {
         if (err) {
