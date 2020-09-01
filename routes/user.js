@@ -23,6 +23,10 @@ router.get('/profile', isLoggedIn, function (req, res, next) {
   });
 });
 
+router.get('/contact', function (req, res, next) {
+  res.render('user/contact');
+});
+
 router.get('/logout', isLoggedIn, function (req, res, next) {
   req.logout();
   res.redirect('/');

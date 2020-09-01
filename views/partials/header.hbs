@@ -16,9 +16,6 @@
           <li class="nav-item">
             <a class="nav-link" href="/residential">Residential</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/contact_us">Contact Us</a>
-          </li>
         </ul>
     </div>
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
@@ -36,10 +33,12 @@
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
           {{#if login }}
             <a class="dropdown-item" href="/user/profile">User Account</a>
+            <a class="dropdown-item" href="/user/contact">Contact Us</a>
             <a class="dropdown-item" href="/user/logout">Logout</a>
           {{ else }}
             <a class="dropdown-item" href="/user/signup">Sign Up</a>
             <a class="dropdown-item" href="/user/signin">Sign In</a>
+            <a class="dropdown-item" href="/user/contact">Contact Us</a>
           {{/if}}
         </div>
       </li>
