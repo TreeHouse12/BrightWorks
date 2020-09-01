@@ -30,6 +30,12 @@ var services = [
         description: 'Have your house softwashed with detergent and rinse',
         price: 350
     }),
+    new Service({
+        imagePath: '/images/foamcannon1.jpeg',
+        title: 'Mobile Car Detailing',
+        description: 'Have your car detailed',
+        price: 350
+    }),
 ];
 
 var done = 0;
