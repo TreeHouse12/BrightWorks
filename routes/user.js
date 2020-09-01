@@ -24,7 +24,12 @@ router.get('/profile', isLoggedIn, function (req, res, next) {
 });
 
 router.get('/contact', function (req, res, next) {
-  res.render('user/contact');
+  var messages = req.flash('error');
+  res.render('user/contact',  {csrfToken: req.csrfToken(), messages :messages, hasErrors: messages.length > 0});
+});
+
+router.post('/send', function (req, res, next) {
+  console.log(req.body);
 });
 
 router.get('/logout', isLoggedIn, function (req, res, next) {
