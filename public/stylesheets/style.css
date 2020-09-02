@@ -25,7 +25,9 @@
           width: 33%!important;
       }
 
-
+.card{
+  border: none;
+}
       .logo{
           cursor: pointer;
       }
