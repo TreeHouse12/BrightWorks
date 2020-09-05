@@ -30,6 +30,27 @@ var services = [
         description: 'Have your house softwashed with detergent and rinse',
         price: 350
     }),
+
+    new Service({
+        imagePath: '/images/foamcannon1.jpeg',
+        title: 'Mobile Car softwashed',
+        description: 'Have your car softwashed with detergent and rinse',
+        price: 350
+    }),
+
+    new Service({
+        imagePath: '/images/interior.jpeg',
+        title: 'Interior Painting',
+        description: 'Have your house painted.',
+        price: 350
+    }),
+
+    new Service({
+        imagePath: '/images/Deckstain1.jpeg',
+        title: 'Deck Staining',
+        description: 'Have your deck stained.',
+        price: 350
+    }),
 ];
 
 var done = 0;
