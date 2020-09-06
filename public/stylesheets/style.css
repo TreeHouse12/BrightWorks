@@ -21,13 +21,23 @@
           padding: 30px 70px;
       }
 
+
+.card{
+  border:none;
+}
+      .card-footer {
+        background: transparent;
+        border-top: 0px;
+      }
       .w-50 {
           width: 33%!important;
       }
 
-.card{
-  border: none;
-}
+
+
+
+
+
       .logo{
           cursor: pointer;
       }

@@ -6,31 +6,35 @@
   </div>
 </div>
 
+<p>
 
 
+  {{# each services }}
 
-{{# each services }}
-<div class="card-deck">
-{{# each this }}
+    <div class="card-deck">
+      {{# each this }}
+    
 
+        <div class="card">
+          <div class="embed-responsive embed-responsive-16by9">
+            <img alt="deck" class="card-img-top embed-responsive-item" src="{{ this.imagePath }}" />
+          </div>
+          <div class="card-body">
+            <h5 class="card-title text-center">{{ this.title }}</h5>
+            <p class="card-text">{{ this.description }}</p>
 
-      <div class="card">
-      <div class="embed-responsive embed-responsive-16by9">
-        <img alt="deck" class="card-img-top embed-responsive-item" src="{{ this.imagePath }}" />
-      </div>
-      <div class="card-body">
-        <h5 class="card-title text-center">{{ this.title }}</h5>
-        <p class="card-text">{{ this.description }}</p>
-        <div class="clearfix">
-          <div class="price pull-left">${{ this.price }}</div>
-          <a href="/add-to-cart/{{this._id}}" class="btn btn-success pull-right" role="button">Add to Shopping Cart</a>
+            <p class="card-text"><small class="text-muted"></small></p>
+          </div>
+
+          <div class="card-footer text-muted mx-auto">
+
+            <div class="text-left">${{ this.price }}</div>
+
+            <div><a href="/add-to-cart/{{this._id}}" class="btn btn-success float-right" role="button">Add to Shopping Cart</a>
+            </div>
+          </div>
         </div>
-        <p class="card-text"><small class="text-muted"></small></p>
-      </div>
+
+        {{/each}}
     </div>
-
-
-
     {{/each}}
-  </div>
-{{/each}}
