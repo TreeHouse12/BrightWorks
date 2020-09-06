@@ -1,11 +1,29 @@
-Stripe.setPublishableKey('pk_test_51HJ5XEKBSotCa0cl903XXdpCBIeWGXnB5zJKg4OACpJCVyPizdE6fSpxpJbVGoq1fcI0vWzFf1c3tnwSuAEczdcE00Uh3Nk3C7');
+// Set your publishable key: remember to change this to your live publishable key in production
+// See your keys here: https://dashboard.stripe.com/account/apikeys
+var stripe = require("stripe")(process.env.PUB_KEY);
+var elements = stripe.elements();
+
+// Custom styling can be passed to options when creating an Element.
+var style = {
+  base: {
+    // Add your base input styles here. For example:
+    fontSize: '16px',
+    color: '#32325d',
+  },
+};
+
+// Create an instance of the card Element.
+var card = elements.create('card', {style: style});
+
+// Add an instance of the card Element into the `card-element` <div>.
+card.mount('#card-element');
 
 var $form = $('#checkout-form');
 
 $form.submit(function(event) {
   $('#charge-error').addClass('hidden');
   $form.find('button').prop('disabled', true);
-  Stripe.setPublishableKey($form.data('pk_test_51HJ5XEKBSotCa0cl903XXdpCBIeWGXnB5zJKg4OACpJCVyPizdE6fSpxpJbVGoq1fcI0vWzFf1c3tnwSuAEczdcE00Uh3Nk3C7'));
+  Stripe.setPublishableKey($form.data(process.env.PUB_KEY));
   Stripe.card.createToken({
     number: $('#card-number').val(),
     cvc: $('#card-cvc').val(),

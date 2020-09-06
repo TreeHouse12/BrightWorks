@@ -75,10 +75,10 @@ router.post('/checkout', isLoggedIn, function(req, res, next) {
     var cart = new Cart(req.session.cart);
 
     var token = req.body.stripeToken;
-    const stripe = require('stripe')(SECRET_KEY);
+    const stripe = require('stripe')(process.env.SECRET_KEY);
     stripe.customers.create({
       source: token,
-      email: req.body.email
+      name: req.body.name
     })
     .then(customer => {
       stripe.paymentIntents.create(
