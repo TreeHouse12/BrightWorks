@@ -3,6 +3,7 @@ const router = express.Router();
 const Service = require('../models/service');
 const Cart = require('../models/cart');
 const Order = require('../models/order');
+require('dotenv/config');
 
 //GET HOME PAGE
 router.get('/', function (req, res, next) {
