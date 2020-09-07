@@ -11,12 +11,22 @@ var style = {
     color: '#32325d',
   },
 };
+//Get Doc by ID
+var cardNameElement = doc.getElementById("card-name");
 
 // Create an instance of the card Element.
+var cardNumber = elements.create('cardNumber', {});
+var cardExpiry = elements.create('cardExpiry', {});
+var cardCvc = elements.create('cardCvc', {});
 var card = elements.create('card', {style: style});
 
 // Add an instance of the card Element into the `card-element` <div>.
+cardNumber.mount('#card-number-element');
+cardExpiry.mount('#card-expiry-element');
+cardCvc.mount('#card-cvc-element');
 card.mount('#card-element');
+
+//registerElements([cardNumber, cardAddress, cardName, cardExpiryMonth, cardExpiryYear, cardCvc]);
 
 var $form = $('#checkout-form');
 

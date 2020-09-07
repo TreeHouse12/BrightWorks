@@ -68,46 +68,72 @@ router.get('/checkout', isLoggedIn, function(req, res, next) {
   res.render('shop/checkout', {total: cart.totalPrice, errMsg: errMsg, noError: !errMsg});
 });
 
-router.post('/checkout', isLoggedIn, function(req, res, next) {
+router.post('/checkout', isLoggedIn, async (req, res, next) => {
     if (!req.session.cart) {
         return res.redirect('/shopping-cart');
     }
-    var cart = new Cart(req.session.cart);
 
+    var cart = new Cart(req.session.cart);
     var token = req.body.stripeToken;
     const stripe = require('stripe')(process.env.SECRET_KEY);
-    stripe.customers.create({
+    //var elements = stripe.elements();
+    //CardElement
+    //const stripe = useStripe();
+    //const elements = useElements();
+    //var cardElement = elements.create('card');
+    //*const cardElement = elements.getElement('card');
+
+    //*const paymentMethod = await stripe.paymentMethods.create({
+    //*  type: 'card',
+    //*  card: card
+    //billing_details: {
+    //  name: eq.body.name
+    //},
+    //*});
+    //*console.log(paymentMethod)
+
+    const customer = await stripe.customers.create({
       source: token,
       name: req.body.name
-    })
-    .then(customer => {
-      stripe.paymentIntents.create(
-        {
-          amount: cart.totalPrice * 100,
-          currency: "usd",
-          source: token, // obtained with Stripe.js
-          customer: customer.id,
-          description: "Test Charge"
-        }, function(err, charge) {
-            if (err) {
-              req.flash('error', err.message);
-              return res.redirect('/checkout');
-            }
-            var order = new Order({
-              user: req.user,
-              cart: cart,
-              address: req.body.address,
-              name: req.body.name,
-              paymentId: charge.id
-            });
-            order.save(function(err,result) {
-              req.flash('success', 'Successfully bought product!');
-              req.session.cart = null;
-              res.redirect('/');
-            });
-      })
-    })
-    .catch(err => console.log(err))
+    });
+    const intent = await stripe.paymentIntents.create(
+      {
+        amount: cart.totalPrice * 100,
+        currency: "usd",
+        confirmation_method: 'manual',
+        confirm: true,
+        payment_method_types: ['card'],
+        source: token, // obtained with Stripe.js
+        customer: customer.id,
+        description: "Test Charge"
+      }, {
+        stripe_account: '{{CONNECTED_STRIPE_ACCOUNT_ID}}',
+      }, function(err, charge) {
+          if (err) {
+            req.flash('error', err.message);
+            return res.redirect('/checkout');
+          }
+          var order = new Order({
+            user: req.user,
+            cart: cart,
+            address: req.body.address,
+            name: req.body.name,
+            paymentId: charge.id
+          });
+          order.save(function(err,result) {
+            req.flash('success', 'Successfully bought product!');
+            req.session.cart = null;
+            res.redirect('/');
+          });
+    });
+    console.log(intentId)
+    const confirmPaymentIntent = await stripe.paymentIntents.confirm(intent.id)
+    const captureHoldIntent = await stripe.paymentIntents.capture(intent.id)
+      //stripe.paymentMethods.attach(
+      //  paymentMethod.id,
+      //  { customer: customer.id }
+      //)
+      //    .catch(err => console.log(err))
 });
 
 module.exports = router;
