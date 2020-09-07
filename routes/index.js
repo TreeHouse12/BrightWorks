@@ -95,20 +95,22 @@ router.post('/checkout', isLoggedIn, async (req, res, next) => {
     const customer = await stripe.customers.create({
       source: token,
       name: req.body.name
-    });
-    const intent = await stripe.paymentIntents.create(
+    })
+    await stripe.paymentIntents.create(
       {
         amount: cart.totalPrice * 100,
         currency: "usd",
         confirmation_method: 'manual',
         confirm: true,
+        payment_method: "pm_card_visa",
         payment_method_types: ['card'],
         source: token, // obtained with Stripe.js
         customer: customer.id,
         description: "Test Charge"
-      }, {
-        stripe_account: '{{CONNECTED_STRIPE_ACCOUNT_ID}}',
-      }, function(err, charge) {
+      },
+      async function(err, charge) {
+          console.log("Step1");
+          console.log(charge);
           if (err) {
             req.flash('error', err.message);
             return res.redirect('/checkout');
@@ -121,19 +123,13 @@ router.post('/checkout', isLoggedIn, async (req, res, next) => {
             paymentId: charge.id
           });
           order.save(function(err,result) {
+            console.log("Step2");
+            console.log(result);
             req.flash('success', 'Successfully bought product!');
             req.session.cart = null;
             res.redirect('/');
           });
-    });
-    console.log(intentId)
-    const confirmPaymentIntent = await stripe.paymentIntents.confirm(intent.id)
-    const captureHoldIntent = await stripe.paymentIntents.capture(intent.id)
-      //stripe.paymentMethods.attach(
-      //  paymentMethod.id,
-      //  { customer: customer.id }
-      //)
-      //    .catch(err => console.log(err))
+      });
 });
 
 module.exports = router;
