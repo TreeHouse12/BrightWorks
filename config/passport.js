@@ -51,7 +51,7 @@ passport.use('local.signin', new LocalStrategy({
   passwordField: 'password',
   passReqToCallback: true
 }, function(req, username, password, done) {
-    req.checkBody('username', 'Invalid Email address  ').notEmpty().isEmail();
+    req.checkBody('username', 'Invalid Email address').notEmpty().isEmail();
     req.checkBody('password', 'Invalid Password').notEmpty();
     var errors = req.validationErrors();
     if (errors) {
