@@ -51,6 +51,18 @@ router.get('/remove/:id', function(req, res, next) {
   res.redirect('/shopping-cart')
 });
 
+router.get('/reviews', function(req, res, next) {
+  if (!req.session.cart) {
+    return res.render('about/why_us', {services: null});
+  }
+});
+
+router.get('/why_us', function(req, res, next) {
+  if (!req.session.cart) {
+    return res.render('about/why_us', {services: null});
+  }
+});
+
 router.get('/shopping-cart', function(req, res, next) {
   if (!req.session.cart) {
     return res.render('shop/shopping-cart', {services: null});
