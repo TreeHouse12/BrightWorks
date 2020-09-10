@@ -74,37 +74,24 @@ router.post('/checkout', isLoggedIn, async (req, res, next) => {
     }
 
     var cart = new Cart(req.session.cart);
-    var token = req.body.stripeToken;
+    //var token = req.body.stripeToken;
+    //console.log(token)
     const stripe = require('stripe')(process.env.SECRET_KEY);
-    //var elements = stripe.elements();
-    //CardElement
-    //const stripe = useStripe();
-    //const elements = useElements();
-    //var cardElement = elements.create('card');
-    //*const cardElement = elements.getElement('card');
-
-    //*const paymentMethod = await stripe.paymentMethods.create({
-    //*  type: 'card',
-    //*  card: card
-    //billing_details: {
-    //  name: eq.body.name
-    //},
-    //*});
-    //*console.log(paymentMethod)
-
     const customer = await stripe.customers.create({
-      source: token,
+      //source: token,
       name: req.body.name
     })
+    console.log(customer);
+    //if (paymentMethodId) {
     await stripe.paymentIntents.create(
       {
         amount: cart.totalPrice * 100,
         currency: "usd",
         confirmation_method: 'manual',
         confirm: true,
-        payment_method: "pm_card_visa",
+        payment_method: "pm_card_visa",//req.body.payment_method_id,
         payment_method_types: ['card'],
-        source: token, // obtained with Stripe.js
+        //source: token, // obtained with Stripe.js
         customer: customer.id,
         description: "Test Charge"
       },
@@ -130,6 +117,7 @@ router.post('/checkout', isLoggedIn, async (req, res, next) => {
             res.redirect('/');
           });
       });
+    //}
 });
 
 module.exports = router;

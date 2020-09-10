@@ -5,7 +5,7 @@
     <div id="charge-error" class="alert alert-danger" {{#if noError}}hidden{{/if}}>
       {{errMsg}}
     </div>
-    <form action="/checkout" method="post" id="checkout-form">
+    <form action="/checkout" method="post" id="payment-form">
       <div class="row">
         <div class="col-xl-12">
           <div class="form-group">
@@ -22,40 +22,21 @@
         <hr>
         <div class="col-xl-12">
           <div class="form-group">
-            <label for="card-name">Card Holder Name</label>
-            <input type="text" class="form-control stripe-element-container" id="card-name" required>
+            <label for="card_name">Card Holder Name</label>
+            <input type="text" class="form-control stripe-element-container" id="card_name" required>
           </div>
         </div>
         <div class="col-xl-12">
-          <div class="form-group">
-            <label for="card-number">Credit Card Number</label>
-            <input type="text" class="form-control stripe-element-container" id="card-number" required>
+          <div class="sr-combo-inputs-row">
+            <div class="sr-input sr-card-element" id="card-element"></div>
           </div>
-        </div>
-        <div class="col-xl-12">
-          <div class="row">
-            <div class="col-xl-6">
-              <div class="form-group">
-                <label for="card-expiry-month">Expiration Month</label>
-                <input type="text" class="form-control stripe-element-container" id="card-expiry-month" required>
-              </div>
-            </div>
-            <div class="col-xl-6">
-              <div class="form-group">
-                <label for="card-expiry-year">Expiration Year</label>
-                <input type="text" class="form-control stripe-element-container" id="card-expiry-year" required>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-12">
-          <div class="form-group">
-            <label for="card-cvc">CVC</label>
-            <input type="text" class="form-control stripe-element-container" id="card-cvc" required>
-          </div>
+          <!-- Used to display form errors. -->
+          <div id="card-errors" role="alert"></div>
         </div>
       </div>
-      <button type+ "submit" class="btn btn-success">Buy now</button>
+      <hr>
+      <button type="submit" class="btn btn-success">Buy now</button>
+      <p>By clicking, you agree to the <a href="https://stripe.com/connect-account/legal">Stripe Connected Account Agreement</a>.</p>
     </form>
   </div>
 </div>

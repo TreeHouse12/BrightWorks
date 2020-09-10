@@ -1,68 +1,73 @@
 // Set your publishable key: remember to change this to your live publishable key in production
 // See your keys here: https://dashboard.stripe.com/account/apikeys
-var stripe = require("stripe")(process.env.PUB_KEY);
+var stripe = Stripe('pk_test_51HJ5XEKBSotCa0cl903XXdpCBIeWGXnB5zJKg4OACpJCVyPizdE6fSpxpJbVGoq1fcI0vWzFf1c3tnwSuAEczdcE00Uh3Nk3C7');
 var elements = stripe.elements();
 
 // Custom styling can be passed to options when creating an Element.
 var style = {
-  base: {
-    // Add your base input styles here. For example:
-    fontSize: '16px',
-    color: '#32325d',
-  },
-};
-//Get Doc by ID
-var cardNameElement = doc.getElementById("card-name");
-
+    base: {
+      color: "#32325d",
+      fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+      fontSmoothing: "antialiased",
+      fontSize: "16px",
+      "::placeholder": {
+        color: "#aab7c4"
+      }
+    },
+    invalid: {
+      color: "#fa755a",
+      iconColor: "#fa755a"
+    }
+  };
 // Create an instance of the card Element.
-var cardNumber = elements.create('cardNumber', {});
-var cardExpiry = elements.create('cardExpiry', {});
-var cardCvc = elements.create('cardCvc', {});
 var card = elements.create('card', {style: style});
 
 // Add an instance of the card Element into the `card-element` <div>.
-cardNumber.mount('#card-number-element');
-cardExpiry.mount('#card-expiry-element');
-cardCvc.mount('#card-cvc-element');
 card.mount('#card-element');
 
-//registerElements([cardNumber, cardAddress, cardName, cardExpiryMonth, cardExpiryYear, cardCvc]);
+var orderData = {
+  items: [{ id: "photo-subscription" }],
+  currency: "usd"
+};
 
-var $form = $('#checkout-form');
+// Create a paymentMethod when submitted
+var form = document.getElementById('payment-form');
+form.addEventListener('submit', function(e) {
+  e.preventDefault();
+  var cardname_Element = document.getElementById('card_name').value;
+  stripe.createPaymentMethod({
+    type: 'card',
+    card: card,
+    billing_details: {
+      name: cardname_Element,
+    }
+  })
 
-$form.submit(function(event) {
-  $('#charge-error').addClass('hidden');
-  $form.find('button').prop('disabled', true);
-  Stripe.setPublishableKey($form.data(process.env.PUB_KEY));
-  Stripe.card.createToken({
-    number: $('#card-number').val(),
-    cvc: $('#card-cvc').val(),
-    exp_month: $('#card-expiry-month').val(),
-    exp_year: $('#card-expiry-year').val(),
-    name: $('#card-name').val()
-  }, stripeResponseHandler);
-  return false
+  //Create a Token
+  stripe.createToken(card, {name: cardname_Element}).then(function(result) {
+    if (result.error) {
+      // Inform the user if there was an error.
+      var errorElement = document.getElementById('card-errors');
+      errorElement.textContent = result.error.message;
+    } else {
+      // Send the token to your server.
+      stripeTokenHandler(result.token);
+    }
+  });
 });
 
-function stripeResponseHandler(status, response) {
-  if (response.error) { // Problem!
+function stripeTokenHandler(token) {
+  var form = document.getElementById('payment-form');
+  var hiddenInput = document.createElement('input');
+  hiddenInput.setAttribute('type', 'hidden');
+  hiddenInput.setAttribute('name', 'stripeToken');
+  hiddenInput.setAttribute('value', token);
+  form.appendChild(hiddenInput);
+  //alert('Success! Got token: ' + token.id)
+  // Insert the token into the form so it gets submitted to the server:
+  //form.append($('<input type="hidden" name="stripeToken" />').val(tok));
 
-    // Show the errors on the form
-    $('#charge-error').text(response.error.message);
-    $('#charge-error').removeClass('hidden');
-    $form.find('button').prop('disabled', false); // Re-enable submission
+  // Submit the form:
+  form.submit();
 
-  } else { // Token was created!
-
-    // Get the token ID:
-    var token = response.id;
-
-    // Insert the token into the form so it gets submitted to the server:
-    $form.append($('<input type="hidden" name="stripeToken" />').val(token));
-
-    // Submit the form:
-    $form.get(0).submit();
-    location.reload();
-
-  }
-}
+};
