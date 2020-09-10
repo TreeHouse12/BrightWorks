@@ -51,6 +51,18 @@ router.get('/remove/:id', function(req, res, next) {
   res.redirect('/shopping-cart')
 });
 
+router.get('/reviews', function(req, res, next) {
+  if (!req.session.cart) {
+    return res.render('about/reviews', {services: null});
+  }
+});
+
+router.get('/why_us', function(req, res, next) {
+  if (!req.session.cart) {
+    return res.render('about/why_us', {services: null});
+  }
+});
+
 router.get('/shopping-cart', function(req, res, next) {
   if (!req.session.cart) {
     return res.render('shop/shopping-cart', {services: null});
@@ -68,46 +80,56 @@ router.get('/checkout', isLoggedIn, function(req, res, next) {
   res.render('shop/checkout', {total: cart.totalPrice, errMsg: errMsg, noError: !errMsg});
 });
 
-router.post('/checkout', isLoggedIn, function(req, res, next) {
+router.post('/checkout', isLoggedIn, async (req, res, next) => {
     if (!req.session.cart) {
         return res.redirect('/shopping-cart');
     }
-    var cart = new Cart(req.session.cart);
 
-    var token = req.body.stripeToken;
+    var cart = new Cart(req.session.cart);
+    //var token = req.body.stripeToken;
+    //console.log(token)
     const stripe = require('stripe')(process.env.SECRET_KEY);
-    stripe.customers.create({
-      source: token,
-      name: req.body.name
+    const customer = await stripe.customers.create({
+      //source: token,
+      name: req.body.name,
+      payment_method: "pm_card_visa",//req.body.payment_method_id,
+      invoice_settings: {
+        default_payment_method: "pm_card_visa",//req.body.payment_method_id,
+      }
     })
-    .then(customer => {
-      stripe.paymentIntents.create(
-        {
-          amount: cart.totalPrice * 100,
-          currency: "usd",
-          source: token, // obtained with Stripe.js
-          customer: customer.id,
-          description: "Test Charge"
-        }, function(err, charge) {
-            if (err) {
-              req.flash('error', err.message);
-              return res.redirect('/checkout');
-            }
-            var order = new Order({
-              user: req.user,
-              cart: cart,
-              address: req.body.address,
-              name: req.body.name,
-              paymentId: charge.id
-            });
-            order.save(function(err,result) {
-              req.flash('success', 'Successfully bought product!');
-              req.session.cart = null;
-              res.redirect('/');
-            });
-      })
-    })
-    .catch(err => console.log(err))
+    console.log(customer);
+    //if (paymentMethodId) {
+    await stripe.paymentIntents.create(
+      {
+        amount: cart.totalPrice * 100,
+        currency: "usd",
+        confirmation_method: 'manual',
+        confirm: true,
+        payment_method: "pm_card_visa",//req.body.payment_method_id,
+        payment_method_types: ['card'],
+        //source: token, // obtained with Stripe.js
+        customer: customer.id,
+        description: "Test Charge"
+      },
+      async function(err, charge) {
+          if (err) {
+            req.flash('error', err.message);
+            return res.redirect('/checkout');
+          }
+          var order = new Order({
+            user: req.user,
+            cart: cart,
+            address: req.body.address,
+            name: req.body.name,
+            paymentId: charge.id
+          });
+          order.save(function(err,result) {
+            req.flash('success', 'Successfully bought product!');
+            req.session.cart = null;
+            res.redirect('/');
+          });
+      });
+    //}
 });
 
 module.exports = router;
