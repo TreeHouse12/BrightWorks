@@ -34,7 +34,6 @@ passport.use('local.signup', new LocalStrategy({
         if (user) {
             return done(null, false, {message: 'Email already in use.'});
         }
-
         var newUser = new User();
         newUser.username = username;
         newUser.password = newUser.encryptPassword(password);
