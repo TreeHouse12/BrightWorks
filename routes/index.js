@@ -53,7 +53,7 @@ router.get('/remove/:id', function(req, res, next) {
 
 router.get('/reviews', function(req, res, next) {
   if (!req.session.cart) {
-    return res.render('about/why_us', {services: null});
+    return res.render('about/reviews', {services: null});
   }
 });
 
