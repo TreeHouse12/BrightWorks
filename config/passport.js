@@ -34,13 +34,7 @@ passport.use('local.signup', new LocalStrategy({
         if (user) {
             return done(null, false, {message: 'Email already in use.'});
         }
-        /*user.comparePassword(password, function(err, isMatch) {
-          if (isMatch) {
-            return done(null, user);
-          } else {
-            return done(null, false, { message: 'Incorrect password.' });
-          }
-        });*/
+
         var newUser = new User();
         newUser.username = username;
         newUser.password = newUser.encryptPassword(password);
