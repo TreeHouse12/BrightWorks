@@ -30,13 +30,6 @@ var form = document.getElementById('payment-form');
 form.addEventListener('submit', function(e) {
   e.preventDefault();
   var cardname_Element = document.getElementById('card_name').value;
-  stripe.createPaymentMethod({
-    type: 'card',
-    card: card,
-    billing_details: {
-      name: cardname_Element,
-    }
-  })
 
   //Create a Token
   stripe.createToken(card, {name: cardname_Element}).then(function(result) {
