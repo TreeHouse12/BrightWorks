@@ -25,11 +25,6 @@ var card = elements.create('card', {style: style});
 // Add an instance of the card Element into the `card-element` <div>.
 card.mount('#card-element');
 
-var orderData = {
-  items: [{ id: "photo-subscription" }],
-  currency: "usd"
-};
-
 // Create a paymentMethod when submitted
 var form = document.getElementById('payment-form');
 form.addEventListener('submit', function(e) {

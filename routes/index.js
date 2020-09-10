@@ -79,7 +79,11 @@ router.post('/checkout', isLoggedIn, async (req, res, next) => {
     const stripe = require('stripe')(process.env.SECRET_KEY);
     const customer = await stripe.customers.create({
       //source: token,
-      name: req.body.name
+      name: req.body.name,
+      payment_method: "pm_card_visa",//req.body.payment_method_id,
+      invoice_settings: {
+        default_payment_method: "pm_card_visa",//req.body.payment_method_id,
+      }
     })
     console.log(customer);
     //if (paymentMethodId) {
@@ -96,8 +100,6 @@ router.post('/checkout', isLoggedIn, async (req, res, next) => {
         description: "Test Charge"
       },
       async function(err, charge) {
-          console.log("Step1");
-          console.log(charge);
           if (err) {
             req.flash('error', err.message);
             return res.redirect('/checkout');
@@ -110,8 +112,6 @@ router.post('/checkout', isLoggedIn, async (req, res, next) => {
             paymentId: charge.id
           });
           order.save(function(err,result) {
-            console.log("Step2");
-            console.log(result);
             req.flash('success', 'Successfully bought product!');
             req.session.cart = null;
             res.redirect('/');
