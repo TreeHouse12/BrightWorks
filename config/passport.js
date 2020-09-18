@@ -17,8 +17,8 @@ passport.use('local.signup', new LocalStrategy({
     passwordField: 'password',
     passReqToCallback: true
 }, function(req, username, password, done) {
-    req.checkBody('username', 'Invalid Email').notEmpty().isEmail();
-    req.checkBody('password', 'Your password must be at least 8 characters').notEmpty().isLength({min:8});
+    req.checkBody('username', 'Invalid Email address').notEmpty().isEmail();
+    req.checkBody('password', 'Your password must be at least 8 characters').notEmpty().isLength({min:8}).equals(req.body.confirm);
     var errors = req.validationErrors();
     if (errors) {
       var messages = [];
@@ -51,7 +51,7 @@ passport.use('local.signin', new LocalStrategy({
   passwordField: 'password',
   passReqToCallback: true
 }, function(req, username, password, done) {
-    req.checkBody('username', 'Invalid Email').notEmpty().isEmail();
+    req.checkBody('username', 'Invalid Email address').notEmpty().isEmail();
     req.checkBody('password', 'Invalid Password').notEmpty();
     var errors = req.validationErrors();
     if (errors) {
