@@ -87,6 +87,68 @@ router.use('/', notLoggedIn, function(req, res, next) {
   next();
 });
 
+router.get('/forgot', function (req, res, next) {
+  var messages = req.flash('error');
+  res.render('forgot', {messages :messages, hasErrors: messages.length > 0});
+});
+
+router.post('/forgot', function (req, res, next) {
+  async.waterfall([
+    function(done) {
+      crypto.randomBytes(20, function(err, buf) {
+        var token = buf.toString('hex');
+        done(err, token);
+      });
+    },
+    function(token, done) {
+      User.findOne({'username': req.body.name}, function(err, user) {
+        if (!user) {
+          req.flash('error', 'No account with that email address exists.');
+          return res.render('forgot', {errMsg: 'No account with that email address exists.'});
+        //  return res.redirect('/forgot');
+        }
+        console.log("Step1");
+        user.resetPasswordToken = token;
+        user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+
+        user.save(function(err) {
+          done(err, token, user);
+        });
+      });
+    },
+    function(token, user, done) {
+      var smtpTransport = nodemailer.createTransport({
+        service: 'Gmail',
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASSWORD
+        }
+      });
+      console.log("Step2");
+      var mailOptions = {
+        to: user.email,
+        from: 'support@brightworksmaintenance.com',
+        subject: 'Password Reset Request',
+        text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
+          'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
+          'http://' + req.headers.host + '/reset/' + token + '\n\n' +
+          'If you did not request this, please ignore this email and your password will remain unchanged.\n'
+      };
+      smtpTransport.sendMail(mailOptions, function(err) {
+        console.log('mail sent');
+        req.flash('success', 'An e-mail has been sent to ' + user.email + ' with further instructions.');
+        done(err, 'done');
+      });
+      console.log("Step3");
+    }
+  ], function(err) {
+    console.log("Step4");
+    if (err) return next(err);
+    console.log("Step5");
+    res.redirect('/user/forgot');
+  });
+});
+
 router.get('/signup', function (req, res, next) {
   var messages = req.flash('error');
   res.render('user/signup', {csrfToken: req.csrfToken(), messages :messages, hasErrors: messages.length > 0});
