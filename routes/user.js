@@ -89,7 +89,7 @@ router.use('/', notLoggedIn, function(req, res, next) {
 
 router.get('/forgot', function (req, res, next) {
   var messages = req.flash('error');
-  res.render('forgot', {messages :messages, hasErrors: messages.length > 0});
+  res.render('user/forgot', {messages :messages, hasErrors: messages.length > 0});
 });
 
 router.post('/forgot', function (req, res, next) {
@@ -104,7 +104,7 @@ router.post('/forgot', function (req, res, next) {
       User.findOne({'username': req.body.name}, function(err, user) {
         if (!user) {
           req.flash('error', 'No account with that email address exists.');
-          return res.render('forgot', {errMsg: 'No account with that email address exists.'});
+          return res.render('user/forgot', {errMsg: 'No account with that email address exists.'});
         //  return res.redirect('/forgot');
         }
         console.log("Step1");
