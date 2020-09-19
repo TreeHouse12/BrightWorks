@@ -90,7 +90,7 @@ router.use('/', notLoggedIn, function(req, res, next) {
   next();
 });
 
-router.get('/forgot', function (req, res, next) {
+router.get('/forgot', function (req, res) {
   var messages = req.flash('error');
   res.render('user/forgot', {csrfToken: req.csrfToken(), messages :messages, hasErrors: messages.length > 0});
 });
