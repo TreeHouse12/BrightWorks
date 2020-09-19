@@ -83,11 +83,11 @@ router.get('/logout', isLoggedIn, function (req, res, next) {
   res.redirect('/');
 });
 
-router.get('/forgot', isLoggedIn, function (req, res, next) {
+router.get('/forgot', function (req, res) {
   res.render('forgot');
 });
 
-router.post('/forgot', isLoggedIn, function (req, res, next) {
+router.post('/forgot', function (req, res, next) {
   async.waterfall([
       function(done) {
         crypto.randomBytes(20, function(err, buf) {
