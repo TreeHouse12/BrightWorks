@@ -92,7 +92,7 @@ router.use('/', notLoggedIn, function(req, res, next) {
 
 router.get('/forgot', function (req, res, next) {
   var messages = req.flash('error');
-  res.render('user/forgot', {messages :messages, hasErrors: messages.length > 0});
+  res.render('user/forgot', {csrfToken: req.csrfToken(), messages :messages, hasErrors: messages.length > 0});
 });
 
 router.post('/forgot', function (req, res, next) {
