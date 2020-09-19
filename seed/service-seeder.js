@@ -41,7 +41,6 @@ for (var i =0; i < services.length; i++) {
       }
   });
 }
-
 function exit() {
   mongoose.disconnect();
 }
