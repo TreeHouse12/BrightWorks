@@ -9,6 +9,7 @@ const flash = require('connect-flash');
 const Service = require('./models/service');
 const Cart = require('./models/cart');
 const validate = require('express-validator');
+const MongoStore = require('connect-mongo')(session);
 require('dotenv/config');
 const app = express();
 const Handlebars = require('handlebars');
@@ -23,12 +24,20 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(validate());
 app.use(cookieParser());
-app.use(session({secret:"asdfdffdf323rdcc",resave:false,saveUninitialized:false}));
+app.use(session({
+  secret:"asdfdffdf323rdcc",
+  resave:false,
+  saveUninitialized:false,
+  store: new MongoStore({ mongooseConnection: mongoose.connection }),
+  cookie: { maxAge: 180 * 60 * 1000 }
+}));
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(express.static('public'));
 app.use(function(req, res, next) {
   res.locals.login = req.isAuthenticated();
+  res.locals.session = req.session;
   next();
 });
 
@@ -40,31 +49,9 @@ const postsRoute = require('./routes/posts');
 app.use('/user', userRoutes);
 app.use('/', routes);
 app.use('/posts', postsRoute);
-app.use(express.static('public'));
-
-//ROUTES
-//app.get('/', (req, res) => {
-//    res.sendFile('index.html', { root: __dirname });
-//});
-
-app.get('/login', (req, res) => {
-    res.sendFile('login.html', { root: __dirname });
-});
-
-app.get('/why_us', (req, res) => {
-    res.sendFile('why_us.html', { root: __dirname });
-});
 
 app.get('/residential', (req, res) => {
     res.sendFile('residential.html', { root: __dirname });
-});
-
-app.get('/contact_us', (req, res) => {
-    res.sendFile('contact_us.html', { root: __dirname });
-});
-
-app.get('/reviews', (req, res) => {
-    res.sendFile('reviews.html', { root: __dirname });
 });
 
 app.get('/add-to-cart/:id', (req, res) => {
@@ -81,14 +68,6 @@ app.get('/add-to-cart/:id', (req, res) => {
       res.redirect('/');
    });
 });
-
-app.get('/registration', (req, res) => {
-    res.sendFile('registration.html', { root: __dirname });
-});
-
-//app.get('/state', (req, res) => {
-//    res.sendFile('state.js', { root: __dirname });
-//});
 
 //Connect to DB
 mongoose.connect(process.env.DB_CONNECTION, {

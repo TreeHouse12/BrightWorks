@@ -1,13 +1,26 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="/">Brightworks Maintenance</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNavDropdown">
+<nav class="navbar navbar-expand-md navbar-custom">
+    <div class="d-flex w-50 order-0">
+        <a class="navbar-brand mr-1" href="/">Brightworks</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsingNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
     <ul class="navbar-nav ml-auto">
       <li class="nav-item">
+        <a class="nav-link" href="/why_us/">
+          <i class="fa fa-why_us" aria-hidden="true"></i> Why_Us
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/reviews/">
+          <i class="fa fa-reviews" aria-hidden="true"></i> Reviews
+        </a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link" href="/shopping-cart/">
-          <i class="fa fa-shopping-cart" aria-hidden="true"></i> Pricing
+          <i class="fa fa-shopping-cart" aria-hidden="true"></i> Cart
+          <span class="badge">{{session.cart.totalQty}}</span>
         </a>
       </li>
       <li class="nav-item dropdown">
@@ -17,10 +30,12 @@
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
           {{#if login }}
             <a class="dropdown-item" href="/user/profile">User Account</a>
+            <a class="dropdown-item" href="/user/contact">Contact Us</a>
             <a class="dropdown-item" href="/user/logout">Logout</a>
           {{ else }}
             <a class="dropdown-item" href="/user/signup">Sign Up</a>
             <a class="dropdown-item" href="/user/signin">Sign In</a>
+            <a class="dropdown-item" href="/user/contact">Contact Us</a>
           {{/if}}
         </div>
       </li>
