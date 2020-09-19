@@ -1,5 +1,8 @@
 const express = require('express');
 const router = express.Router();
+const async = require('async');
+const crypto = require('crypto');
+const User = require('../models/user');
 const Service = require('../models/service');
 const Cart = require('../models/cart');
 const Order = require('../models/order');
@@ -144,8 +147,8 @@ router.post('/forgot', function (req, res, next) {
         done(err, token);
       });
     },
-    function(token, done) {
-      User.findOne({ 'username': username }, function(err, user) {
+    function(token, username, done) {
+      User.findOne({'username': username}, function(err, user) {
         if (!user) {
           req.flash('error', 'No account with that email address exists.');
           return res.redirect('/forgot');
