@@ -1,8 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const csrf = require('csurf');
+const async = require('async');
+const crypto = require('crypto');
 const passport = require('passport');
 const nodemailer = require('nodemailer');
+const User = require('../models/user');
 require('dotenv/config');
 
 const Order = require('../models/order')
