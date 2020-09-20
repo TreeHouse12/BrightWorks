@@ -92,7 +92,8 @@ router.use('/', notLoggedIn, function(req, res, next) {
 
 router.get('/forgot', function (req, res) {
   var messages = req.flash('error');
-  res.render('user/forgot', {csrfToken: req.csrfToken(), messages :messages, hasErrors: messages.length > 0});
+  var successMsg = req.flash('success')[0];
+  res.render('user/forgot', {csrfToken: req.csrfToken(), messages: messages, successMsg: successMsg, hasErrors: messages.length > 0});
 });
 
 router.post('/forgot', function (req, res, next) {
@@ -146,6 +147,16 @@ router.post('/forgot', function (req, res, next) {
   ], function(err) {
     if (err) return next(err);
     res.redirect('/user/forgot');
+  });
+});
+
+router.get('/reset/:token', function(req, res) {
+  User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user) {
+    if (!user) {
+      req.flash('error', 'Password reset token is invalid or has expired.');
+      return res.redirect('/user/forgot');
+    }
+    res.render('reset', {token: req.params.token});
   });
 });
 
