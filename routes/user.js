@@ -104,12 +104,12 @@ router.post('/forgot', function (req, res, next) {
       });
     },
     function(token, done) {
-      User.findOne({'username': req.body.name}, function(err, user) {
+      User.findOne({ username: req.body.email }, function(err, user) {
+        console.log(user);
         if (!user) {
           req.flash('error', 'No account with that email address exists.');
           return res.redirect('/user/forgot');
         }
-        console.log("Step1");
         user.resetPasswordToken = token;
         user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
 
@@ -120,15 +120,16 @@ router.post('/forgot', function (req, res, next) {
     },
     function(token, user, done) {
       var smtpTransport = nodemailer.createTransport({
-        service: 'Gmail',
+        host: 'mail.brightworksmaintenance.com',
+        port: 587,
+        secure: false, // true for 465, false for other ports
         auth: {
           user: process.env.EMAIL_USER,
           pass: process.env.EMAIL_PASSWORD
         }
       });
-      console.log("Step2");
       var mailOptions = {
-        to: user.email,
+        to: user.username,
         from: 'support@brightworksmaintenance.com',
         subject: 'Password Reset Request',
         text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
@@ -138,15 +139,12 @@ router.post('/forgot', function (req, res, next) {
       };
       smtpTransport.sendMail(mailOptions, function(err) {
         console.log('mail sent');
-        req.flash('success', 'An e-mail has been sent to ' + user.email + ' with further instructions.');
+        req.flash('success', 'An e-mail has been sent to ' + user.username + ' with further instructions.');
         done(err, 'done');
       });
-      console.log("Step3");
     }
   ], function(err) {
-    console.log("Step4");
     if (err) return next(err);
-    console.log("Step5");
     res.redirect('/user/forgot');
   });
 });
