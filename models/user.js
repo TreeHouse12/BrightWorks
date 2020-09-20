@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const bcrypt = require('bcrypt-nodejs');
+var passportLocalMongoose=require("passport-local-mongoose");
 
 var userSchema = mongoose.Schema({
   username: {
@@ -15,6 +16,8 @@ var userSchema = mongoose.Schema({
   resetPasswordToken: String,
   resetPasswordExpires: Date
 });
+
+userSchema.plugin(passportLocalMongoose);
 
 userSchema.methods.encryptPassword = function(password) {
   return bcrypt.hashSync(password, bcrypt.genSaltSync(5), null);
