@@ -172,7 +172,8 @@ router.post('/reset/:token', function(req, res) {
             user.resetPasswordToken = undefined;
             user.resetPasswordExpires = undefined;
 
-            user.save(function(err) {
+            user.password = user.encryptPassword(req.body.password);
+            user.save(function(err, result) {
               req.logIn(user, function(err) {
                 done(err, user);
               });
