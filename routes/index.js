@@ -129,8 +129,9 @@ router.post('/checkout', isLoggedIn, async (req, res, next) => {
         order.save(function(err,result) {
           req.flash('success', 'Successfully bought product!');
           req.session.cart = null;
+          return res.redirect('/');
           // Send the response to the client
-          console.log(charge);
+          // console.log(charge);
           //res.send(generateResponse(charge));
         });
       })
@@ -139,7 +140,6 @@ router.post('/checkout', isLoggedIn, async (req, res, next) => {
         req.body.payment_intent_id
       );
     }
-    return res.redirect('/');
 });
 
 module.exports = router;

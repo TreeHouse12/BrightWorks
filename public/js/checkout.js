@@ -62,7 +62,7 @@ function stripePaymentMethodHandler(result) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        payment_method_id: result.paymentMethod.id
+        payment_method_id: result.paymentMethod.id,
       })
     }).then(function(result) {
       // Handle server response (see Step 4)
