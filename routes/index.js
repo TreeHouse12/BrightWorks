@@ -3,6 +3,7 @@ const router = express.Router();
 const Service = require('../models/service');
 const Cart = require('../models/cart');
 const Order = require('../models/order');
+const User = require('../models/user');
 require('dotenv/config');
 
 //GET HOME PAGE
@@ -84,12 +85,11 @@ router.post('/checkout', isLoggedIn, async (req, res, next) => {
     if (!req.session.cart) {
         return res.redirect('/shopping-cart');
     }
-
     var cart = new Cart(req.session.cart);
     //var token = req.body.stripeToken;
     //console.log(token)
     const stripe = require('stripe')(process.env.SECRET_KEY);
-    /*const customer = await stripe.customers.create({
+    const customer = await stripe.customers.create({
       //source: token,
       name: req.body.name,
       payment_method: req.body.payment_method_id,
@@ -97,24 +97,22 @@ router.post('/checkout', isLoggedIn, async (req, res, next) => {
         default_payment_method: req.body.payment_method_id,
       }
     })
-    console.log(customer.id);*/
+    console.log(customer.id);
     //if (paymentMethodId) {
-    let charge;
     if (req.body.payment_method_id) {
-      console.log("paymentIntents");
-      console.log(req.body.payment_method_id);
-      charge = await stripe.paymentIntents.create({
+      await stripe.paymentIntents.create({
         amount: cart.totalPrice * 100,
         currency: "usd",
+        payment_method: req.body.payment_method_id,
+        receipt_email: req.user.username,
         confirmation_method: 'manual',
         confirm: true,
-        payment_method: req.body.payment_method_id,
         payment_method_types: ['card'],
-        //source: token, // obtained with Stripe.js
-        customer: req.body.payment_method_customer,
+        customer: customer.id,
         description: "Test Charge"
       },
       async function(err, charge) {
+        console.log(charge);
         if (err) {
           req.flash('error', err.message);
           return res.redirect('/checkout');
@@ -127,12 +125,10 @@ router.post('/checkout', isLoggedIn, async (req, res, next) => {
           paymentId: charge.id
         });
         order.save(function(err,result) {
+          console.log("Success");
           req.flash('success', 'Successfully bought product!');
           req.session.cart = null;
           return res.redirect('/');
-          // Send the response to the client
-          // console.log(charge);
-          //res.send(generateResponse(charge));
         });
       })
     } else if (req.body.payment_intent_id) {
@@ -140,6 +136,9 @@ router.post('/checkout', isLoggedIn, async (req, res, next) => {
         req.body.payment_intent_id
       );
     }
+    // Send the response to the client
+    // console.log(charge);
+    //res.send(generateResponse(charge));
 });
 
 module.exports = router;

@@ -54,19 +54,21 @@ form.addEventListener('submit', function(e) {
 });
 
 function stripePaymentMethodHandler(result) {
+  console.log(result);
   if (result.error) {
-    // Show error in payment form
+    console.log("Your card was not authenticated, please try again");
   } else {
     // Otherwise send paymentMethod.id to your server (see Step 4)
     fetch('/checkout', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        payment_method_id: result.paymentMethod.id,
+        payment_method_id: result.paymentMethod.id
       })
-    }).then(function(result) {
-      // Handle server response (see Step 4)
-      result.json().then(function(json) {
+     }).then(function(result) {
+        // Handle server response (see Step 4)
+        result.json()
+       .then(function(json) {
         handleServerResponse(json);
       })
     });
