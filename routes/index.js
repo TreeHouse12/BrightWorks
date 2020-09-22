@@ -89,15 +89,6 @@ router.post('/checkout', isLoggedIn, async (req, res, next) => {
     //var token = req.body.stripeToken;
     //console.log(token)
     const stripe = require('stripe')(process.env.SECRET_KEY);
-    const customer = await stripe.customers.create({
-      //source: token,
-      name: req.body.name,
-      payment_method: req.body.payment_method_id,
-      invoice_settings: {
-        default_payment_method: req.body.payment_method_id,
-      }
-    })
-    console.log(customer.id);
     //if (paymentMethodId) {
     if (req.body.payment_method_id) {
       await stripe.paymentIntents.create({
@@ -108,11 +99,9 @@ router.post('/checkout', isLoggedIn, async (req, res, next) => {
         confirmation_method: 'manual',
         confirm: true,
         payment_method_types: ['card'],
-        customer: customer.id,
         description: "Test Charge"
       },
       async function(err, charge) {
-        console.log(charge);
         if (err) {
           req.flash('error', err.message);
           return res.redirect('/checkout');
