@@ -13,10 +13,12 @@ passport.deserializeUser(function(id, done) {
 });
 
 passport.use('local.signup', new LocalStrategy({
+    fullnameField: 'fullname',
     usernameField: 'username',
     passwordField: 'password',
     passReqToCallback: true
 }, function(req, username, password, done) {
+    req.checkBody('fullname', 'Please full in your name').notEmpty();
     req.checkBody('username', 'Invalid Email address').notEmpty().isEmail();
     req.checkBody('password', 'Your password must be at least 8 characters').notEmpty().isLength({min:8}).equals(req.body.confirm);
     var errors = req.validationErrors();
@@ -35,6 +37,7 @@ passport.use('local.signup', new LocalStrategy({
             return done(null, false, {message: 'Email already in use.'});
         }
         var newUser = new User();
+        newUser.fullname = req.body.fullname;
         newUser.username = username;
         newUser.password = newUser.encryptPassword(password);
         newUser.save(function(err, result) {

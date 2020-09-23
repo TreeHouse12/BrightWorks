@@ -4,6 +4,10 @@ const bcrypt = require('bcrypt-nodejs');
 var passportLocalMongoose=require("passport-local-mongoose");
 
 var userSchema = mongoose.Schema({
+  fullname: {
+    type: String,
+    required: true
+  },
   username: {
     type: String,
     unique: true,
