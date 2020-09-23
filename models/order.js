@@ -14,6 +14,11 @@ var schema = mongoose.Schema({
     type: String,
     required: true
   },
+  phone: {
+    type: Number,
+    required: true,
+    integer: true
+  },
   name: {
     type: String,
     required: true

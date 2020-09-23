@@ -31,12 +31,16 @@ form.addEventListener('submit', function(e) {
   e.preventDefault();
 
   var cardname_Element = document.getElementById('card_name').value;
+  var address_Element = document.getElementById('address').value;
+  var phone_Element = document.getElementById('phone').value;
   stripe.createPaymentMethod({
     type: 'card',
     card: card,
     billing_details: {
       // Include any additional collected billing details.
+      address: address_Element,
       name: cardname_Element,
+      phone: phone_Element,
     },
   }).then(stripePaymentMethodHandler);
 
