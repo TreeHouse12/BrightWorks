@@ -3,6 +3,7 @@ const router = express.Router();
 const Service = require('../models/service');
 const Cart = require('../models/cart');
 const Order = require('../models/order');
+const User = require('../models/user');
 require('dotenv/config');
 
 //GET HOME PAGE
@@ -81,55 +82,67 @@ router.get('/checkout', isLoggedIn, function(req, res, next) {
 });
 
 router.post('/checkout', isLoggedIn, async (req, res, next) => {
-    if (!req.session.cart) {
-        return res.redirect('/shopping-cart');
-    }
-
-    var cart = new Cart(req.session.cart);
-    //var token = req.body.stripeToken;
-    //console.log(token)
-    const stripe = require('stripe')(process.env.SECRET_KEY);
+  if (!req.session.cart) {
+    return res.redirect('/shopping-cart');
+  }
+  var cart = new Cart(req.session.cart);
+  //var token = req.body.stripeToken;
+  //console.log(token)
+  const stripe = require('stripe')(process.env.SECRET_KEY);
+  if (req.body.payment_method_id) {
     const customer = await stripe.customers.create({
-      //source: token,
       name: req.body.name,
-      payment_method: "pm_card_visa",//req.body.payment_method_id,
+      address: {
+        line1: req.body.address,
+      },
+      phone: req.body.phone,
+      email: req.user.username,
+      //source: token
+      payment_method: req.body.payment_method_id,
       invoice_settings: {
-        default_payment_method: "pm_card_visa",//req.body.payment_method_id,
+        default_payment_method: req.body.payment_method_id,
       }
     })
-    console.log(customer);
     //if (paymentMethodId) {
-    await stripe.paymentIntents.create(
-      {
+    try {
+      await stripe.paymentIntents.create({
         amount: cart.totalPrice * 100,
         currency: "usd",
+        payment_method: req.body.payment_method_id,
+        receipt_email: req.user.username,
         confirmation_method: 'manual',
-        confirm: true,
-        payment_method: "pm_card_visa",//req.body.payment_method_id,
-        payment_method_types: ['card'],
-        //source: token, // obtained with Stripe.js
         customer: customer.id,
+        confirm: true,
+        payment_method_types: ['card'],
         description: "Test Charge"
       },
       async function(err, charge) {
-          if (err) {
-            req.flash('error', err.message);
-            return res.redirect('/checkout');
-          }
-          var order = new Order({
-            user: req.user,
-            cart: cart,
-            address: req.body.address,
-            name: req.body.name,
-            paymentId: charge.id
-          });
-          order.save(function(err,result) {
-            req.flash('success', 'Successfully bought product!');
-            req.session.cart = null;
-            res.redirect('/');
-          });
-      });
-    //}
+        if (err) {
+          req.flash('error', err.message);
+          return res.redirect('/checkout');
+        }
+        var order = new Order({
+          user: req.user,
+          cart: cart,
+          phone: req.body.phone,
+          address: req.body.address,
+          name: req.body.name,
+          paymentId: charge.id
+        });
+        order.save(function(err,result) {
+          req.flash('success', 'Successfully bought product!');
+          req.session.cart = null;
+          res.redirect('/');
+        });
+      })
+    } catch (err) {
+      console.log(err, "error occured");
+    }
+  } else if (req.body.payment_intent_id) {
+      intent = await stripe.paymentIntents.confirm(
+      req.body.payment_intent_id
+    );
+  }
 });
 
 module.exports = router;
@@ -141,3 +154,29 @@ function isLoggedIn(req, res, next) {
     req.session.oldUrl = req.url;
     res.redirect('/user/signin');
 }
+
+const generateResponse = (intent) => {
+  // Note that if your API version is before 2019-02-11, 'requires_action'
+  // appears as 'requires_source_action'.
+  if (
+    intent.status === 'requires_action' &&
+    intent.next_action.type === 'use_stripe_sdk'
+  ) {
+    // Tell the client to handle the action
+    return {
+      requires_action: true,
+      payment_intent_client_secret: intent.client_secret
+    };
+  } else if (intent.status === 'succeeded') {
+    // The payment didn’t need any additional actions and completed!
+    // Handle post-payment fulfillment
+    return {
+      success: true
+    };
+  } else {
+    // Invalid status
+    return {
+      error: 'Invalid PaymentIntent status'
+    }
+  }
+};

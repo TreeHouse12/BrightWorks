@@ -29,7 +29,20 @@ card.mount('#card-element');
 var form = document.getElementById('payment-form');
 form.addEventListener('submit', function(e) {
   e.preventDefault();
+
   var cardname_Element = document.getElementById('card_name').value;
+  var address_Element = document.getElementById('address').value;
+  var phone_Element = document.getElementById('phone').value;
+  stripe.createPaymentMethod({
+    type: 'card',
+    card: card,
+    billing_details: {
+      // Include any additional collected billing details.
+      address: address_Element,
+      name: cardname_Element,
+      phone: phone_Element,
+    },
+  }).then(stripePaymentMethodHandler);
 
   //Create a Token
   stripe.createToken(card, {name: cardname_Element}).then(function(result) {
@@ -43,6 +56,30 @@ form.addEventListener('submit', function(e) {
     }
   });
 });
+
+function stripePaymentMethodHandler(result) {
+  if (result.error) {
+    console.log("Your card was not authenticated, please try again");
+  } else {
+    var pay = result.paymentMethod.id
+    var $form = $('#payment-form');
+    $form.append($('<input type="hidden" name="payment_method_id" />').val(pay));
+    $form.get(0).submit();
+  }
+}
+
+function handleServerResponse(response) {
+  if (response.error) {
+    // Show error from server on payment form
+  } else if (response.requires_action) {
+    // Use Stripe.js to handle required card action
+    stripe.handleCardAction(
+      response.payment_intent_client_secret
+    ).then(handleStripeJsResult);
+  } else {
+    // Show success message
+  }
+}
 
 function stripeTokenHandler(token) {
   var form = document.getElementById('payment-form');
