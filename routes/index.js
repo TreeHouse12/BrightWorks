@@ -82,49 +82,60 @@ router.get('/checkout', isLoggedIn, function(req, res, next) {
 });
 
 router.post('/checkout', isLoggedIn, async (req, res, next) => {
-    if (!req.session.cart) {
-        return res.redirect('/shopping-cart');
-    }
-    var cart = new Cart(req.session.cart);
-    //var token = req.body.stripeToken;
-    //console.log(token)
-    const stripe = require('stripe')(process.env.SECRET_KEY);
+  if (!req.session.cart) {
+    return res.redirect('/shopping-cart');
+  }
+  var cart = new Cart(req.session.cart);
+  //var token = req.body.stripeToken;
+  //console.log(token)
+  const stripe = require('stripe')(process.env.SECRET_KEY);
+  if (req.body.payment_method_id) {
+    const customer = await stripe.customers.create({
+      email: req.user.username,
+      //source: token
+      payment_method: req.body.payment_method_id,
+      invoice_settings: {
+        default_payment_method: req.body.payment_method_id,
+      }
+    })
+    console.log(customer.id);
     //if (paymentMethodId) {
-    if (req.body.payment_method_id) {
-      await stripe.paymentIntents.create({
-        amount: cart.totalPrice * 100,
-        currency: "usd",
-        payment_method: req.body.payment_method_id,
-        receipt_email: req.user.username,
-        confirmation_method: 'manual',
-        confirm: true,
-        payment_method_types: ['card'],
-        description: "Test Charge"
-      },
-      async function(err, charge) {
-        if (err) {
-          req.flash('error', err.message);
-          return res.redirect('/checkout');
-        }
-        var order = new Order({
-          user: req.user,
-          cart: cart,
-          address: req.body.address,
-          name: req.body.name,
-          paymentId: charge.id
-        });
-        order.save(function(err,result) {
-          console.log("Success");
-          req.flash('success', 'Successfully bought product!');
-          req.session.cart = null;
-          return res.redirect('/');
-        });
-      })
-    } else if (req.body.payment_intent_id) {
+    await stripe.paymentIntents.create({
+      amount: cart.totalPrice * 100,
+      currency: "usd",
+      payment_method: req.body.payment_method_id,
+      receipt_email: req.user.username,
+      confirmation_method: 'manual',
+      customer: customer.id,
+      confirm: true,
+      payment_method_types: ['card'],
+      description: "Test Charge"
+    },
+    async function(err, charge) {
+      console.log(charge);
+      if (err) {
+        req.flash('error', err.message);
+        return res.redirect('/checkout');
+      }
+      var order = new Order({
+        user: req.user,
+        cart: cart,
+        address: req.body.address,
+        name: req.body.name,
+        paymentId: charge.id
+      });
+      order.save(function(err,result) {
+        console.log("Success");
+        req.flash('success', 'Successfully bought product!');
+        req.session.cart = null;
+        return res.redirect('/');
+      });
+    })
+  } else if (req.body.payment_intent_id) {
       intent = await stripe.paymentIntents.confirm(
-        req.body.payment_intent_id
-      );
-    }
+      req.body.payment_intent_id
+    );
+  }
     // Send the response to the client
     // console.log(charge);
     //res.send(generateResponse(charge));
