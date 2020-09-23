@@ -125,10 +125,9 @@ router.post('/checkout', isLoggedIn, async (req, res, next) => {
         paymentId: charge.id
       });
       order.save(function(err,result) {
-        console.log("Success");
         req.flash('success', 'Successfully bought product!');
         req.session.cart = null;
-        return res.redirect('/');
+        res.redirect('/');
       });
     })
   } else if (req.body.payment_intent_id) {
@@ -136,9 +135,8 @@ router.post('/checkout', isLoggedIn, async (req, res, next) => {
       req.body.payment_intent_id
     );
   }
-    // Send the response to the client
-    // console.log(charge);
-    //res.send(generateResponse(charge));
+  // Send the response to the client
+  res.send(generateResponse(charge));
 });
 
 module.exports = router;
