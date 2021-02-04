@@ -19,7 +19,7 @@ router.get('/', function (req, res, next) {
   });
 });
 
-router.get('/add-to-chart/:id', function(req, res, next) {
+router.get('/add-to-cart/:id', function(req, res, next) {
   var serviceId = req.params.id;
   var cart = new Cart(req.session.cart ? req.session.cart : {});
 
