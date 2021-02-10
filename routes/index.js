@@ -9,7 +9,7 @@ require('dotenv/config');
 //GET HOME PAGE
 router.get('/', function (req, res, next) {
   var successMsg = req.flash('success')[0];
-  
+
   Service.find(function(err, docs) {
     var serviceChunks = [];
     var chunkSize = 3;
@@ -33,24 +33,14 @@ router.post('/changePrice', function (req, res) {
   })
 });
 
-
-
-
-
-
-
-
-
-
-
 router.get('/add-to-cart/:id', function(req, res, next) {
   var serviceId = req.params.id;
   var cart = new Cart(req.session.cart ? req.session.cart : {});
-  
 
-  
 
-  
+
+
+
 
   Service.findById(serviceId, function(err, service) {
     if (err) {

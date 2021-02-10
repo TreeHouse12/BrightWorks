@@ -25,10 +25,10 @@
               <ul class="list-unstyled mt-3 mb-4">
                 <li>{{ this.description }}</li>
               </ul>
-                
+
                   <form method="POST" action="/changePrice" >
                       <div class="form-group text-center " >
-                       
+
                         <select name="price" class="form-select" id="price" aria-describedby="priceHelp" aria-label="Default select ">
                             <option id="100" value="100" selected="selected">1000 sqft or less</option>
                               <option id="250" value="250">1001 - 2000 sqft</option>
@@ -40,21 +40,21 @@
                           <div class="text-center">
                           <button type="submit" class="btn btn-primary mb-2 text-center ">Get Estimate</button>                      </div>
                     </form>
-                   
 
-                    <script type="text/javascript"> 
+
+                    <script type="text/javascript">
                         document.getElementById('price').onchange = function() {
                             localStorage.setItem('selectedtem', document.getElementById('price').value);
                         };
 
                         if (localStorage.getItem('selectedtem')) {
                             document.getElementById(localStorage.getItem('selectedtem')).selected = true;
-                        } 
+                        }
                     </script>
-              
+
                   
 
-                
+
                 <br>
 
               <a href="/add-to-cart/{{this._id}}" class="btn mt-auto btn-success " role="button">Add to Shopping Cart</a>
@@ -74,7 +74,7 @@
               </ul>
 
 
-                
+
                 <br>
 
               <a href="/add-to-cart/{{this._id}}" class="btn mt-auto btn-success " role="button">Add to Shopping Cart</a>
