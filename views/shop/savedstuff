@@ -1,0 +1,154 @@
+ {{#if this.jobTitle}} 
+                
+              
+              <script type="text/javascript">
+
+                    document.getElementById("button").addEventListener('click', function () {
+
+                     jobCost = document.getElementById("sqftCombo").value
+
+                     document.getElementById('text').value = "Your estimated cost is : " + jobCost+ "$" ;
+
+                    });
+
+
+                </script>
+
+
+            
+                <input type='text' name='price' id='text' >
+                <input type='submit' value='send' >  
+                
+
+                <input style="border:none" type="text" value="" id="text" />
+                <input type="button" value="Click For Estimate" id="button" />
+                <br>
+
+                <select id="sqftCombo">
+                    <option value="100" selected="selected">1000 sqft or less</option>
+                    <option value="250">1001 - 2000 sqft</option>
+                    <option value="350">2001 3000 sqft </option>
+                    <option value="450">3001 - 4000 sqft</option>
+                </select>
+
+                
+                {{/if}}
+
+               router.get('/updateDB/:title', function(req, res, next) {
+  var  priceID = req.params.title;
+  console.log(priceID);
+  Service.findOneAndUpdate({jobTitle: "housewash"}, {$set:{price: priceID }}, {new: true}, (err, doc) => {
+    if (err) {
+        console.log("Something wrong when updating data!");
+    }
+ 
+    console.log(doc);
+ });
+ 
+});
+
+<form action='/changePrice' method='post'>
+
+                    <select id="sqftCombo">
+                        <option value="100" selected="selected">1000 sqft or less</option>
+                        <option value="250">1001 - 2000 sqft</option>
+                        <option value="350">2001 3000 sqft </option>
+                        <option value="450">3001 - 4000 sqft</option>
+                    </select>
+
+                                   
+                      
+                    <script type="text/javascript">
+
+                        var jobPrice = document.getElementById("sqftCombo").value
+                        document.getElementById('text').value = jobPrice ;
+                       
+                    </script>
+                  <input type='text' name='price' id='text'value=jobPrice >
+                  <input type='submit' value='send' >  
+
+                </form>
+
+
+
+        document.getElementById("text").value = document.getElementById("sqftCombo").value;
+                <form action='/changePrice' method='post'>
+               
+                  
+                <input type='number' name='price' id='text' >
+                  <input type='submit' value='send' >  
+
+                  </form>
+                  
+                    <select id="sqftCombo">
+                        <option value="100" selected="selected">1000 sqft or less</option>
+                        <option value="250">1001 - 2000 sqft</option>
+                        <option value="350">2001 3000 sqft </option>
+                        <option value="450">3001 - 4000 sqft</option>
+                    </select>
+                    
+
+                                   
+                      <script type="text/javascript">
+
+                    document.getElementById("button").addEventListener('click', function () {
+
+                    //document.getElementById('text').value = document.getElementById("sqftCombo").value;
+
+                     //document.getElementById('text').value = "Your estimated cost is : " + jobCost+ "$" ;
+
+                    });
+
+
+                </script>
+
+                              
+
+                              <select id="sqftCombo">
+                        <option value="100" selected="selected">1000 sqft or less</option>
+                        <option value="250">1001 - 2000 sqft</option>
+                        <option value="350">2001 3000 sqft </option>
+                        <option value="450">3001 - 4000 sqft</option>
+                    </select>
+
+
+                    THIS WORKS DO NOT DELETE
+
+           <form method="POST" action="/changePrice">
+                    
+                    <select name="price" class="form-control" id="price">
+                      <option value="100" selected="selected">1000 sqft or less</option>
+                        <option value="250">1001 - 2000 sqft</option>
+                        <option value="350">2001 3000 sqft </option>
+                        <option value="450">3001 - 4000 sqft</option>
+                      <input type='submit'name ='register' value="Choose Square Foot">
+            </form>         
+
+
+
+
+
+
+            <select name="branche" id="branche">
+<option id="select" value="select" disabled="" selected="">Please Select</option>
+<option id="wk_sl_search_select_49" value="49">Alternativ &amp; Ganzheitliche Medizin</option>
+<option id="wk_sl_search_select_50" value="50">Ambulatorien</option>
+<option id="wk_sl_search_select_51" value="51">Apotheken</option>
+<option id="wk_sl_search_select_52" value="52">Architekten</option>
+<option id="wk_sl_search_select_53" value="53">Ärzte</option>
+<option id="wk_sl_search_select_54" value="54">Astrologen</option>
+<option id="wk_sl_search_select_55" value="55">Baumärkte</option>
+<option id="wk_sl_search_select_56" value="56">Beisel &amp; Kneipen</option>
+<option id="wk_sl_search_select_57" value="57">Bestatter</option>
+<option id="wk_sl_search_select_58" value="58">Bijouteriewaren</option>
+<option id="wk_sl_search_select_59" value="59">Blumenhandel &amp; Floristik</option>
+</select>
+<script type="text/javascript"> 
+    document.getElementById('branche').onchange = function() {
+        localStorage.setItem('selectedtem', document.getElementById('branche').value);
+    };
+
+    if (localStorage.getItem('selectedtem')) {
+        document.getElementById('wk_sl_search_select_'+localStorage.getItem('selectedtem')).selected = true;
+    } 
+</script>

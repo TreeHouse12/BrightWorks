@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "@handlebars/allow-prototype-access": "^1.0.3",
+    "async": "^3.2.0",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.19.0",
     "connect-flash": "^0.1.1",
@@ -19,11 +20,14 @@
     "csurf": "^1.11.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "express-handlebars": "^5.2.0",
     "express-session": "^1.17.1",
     "express-validator": "^2.20.5",
-    "mongoose": "^5.9.20",
+    "mongoose": "^5.11.13",
+    "nodemailer": "^6.4.17",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
+    "passport-local-mongoose": "^6.1.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "stripe": "^8.89.0"
@@ -31,5 +35,17 @@
   "devDependencies": {
     "handlebars": "^4.5.0",
     "nodemon": "^2.0.4"
-  }
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TreeHouse12/BrightWorks.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/TreeHouse12/BrightWorks/issues"
+  },
+  "homepage": "https://github.com/TreeHouse12/BrightWorks#readme"
 }

@@ -54,6 +54,9 @@ app.get('/residential', (req, res) => {
     res.sendFile('residential.html', { root: __dirname });
 });
 
+
+
+
 app.get('/add-to-cart/:id', (req, res) => {
    const serviceId = req.params.id;
    const cart = new Cart(req.session.cart ? req.session.cart : {});
@@ -66,6 +69,7 @@ app.get('/add-to-cart/:id', (req, res) => {
       req.session.cart = cart;
       console.log(req.session.cart)
       res.redirect('/');
+
    });
 });
 

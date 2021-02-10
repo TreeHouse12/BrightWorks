@@ -27,3 +27,16 @@
   font-weight: bold;
   font-size: 16px;
 }
+
+div {
+  font-size:0;
+}
+#form{
+  text-align: center;
+  font-size: 14px;
+}
+input {
+  height: 10%;
+  width: 50%;
+  box-sizing: border-box;
+}
