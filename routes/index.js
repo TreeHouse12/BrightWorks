@@ -39,9 +39,6 @@ router.get('/add-to-cart/:id', function(req, res, next) {
 
 
 
-
-
-
   Service.findById(serviceId, function(err, service) {
     if (err) {
         return res.redirect('/');
