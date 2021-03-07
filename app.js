@@ -54,20 +54,7 @@ app.get('/residential', (req, res) => {
     res.sendFile('residential.html', { root: __dirname });
 });
 
-app.get('/add-to-cart/:id', (req, res) => {
-   const serviceId = req.params.id;
-   const cart = new Cart(req.session.cart ? req.session.cart : {});
 
-   Service.findById(serviceId, function(err, service) {
-      if (err) {
-        return res.redirect('/');
-      }
-      cart.add(service, service.id);
-      req.session.cart = cart;
-      console.log(req.session.cart)
-      res.redirect('/');
-   });
-});
 
 //Connect to DB
 mongoose.connect(process.env.DB_CONNECTION, {
