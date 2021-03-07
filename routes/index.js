@@ -9,6 +9,7 @@ require('dotenv/config');
 //GET HOME PAGE
 router.get('/', function (req, res, next) {
   var successMsg = req.flash('success')[0];
+
   Service.find(function(err, docs) {
     var serviceChunks = [];
     var chunkSize = 3;
@@ -19,7 +20,78 @@ router.get('/', function (req, res, next) {
   });
 });
 
-router.get('/add-to-chart/:id', function(req, res, next) {
+
+
+
+router.post('/changePrice', function (req, res) {
+  var newPrice = req.body.price;
+  Service.findOneAndUpdate({jobTitle: "housewash"}, {$set:{price: newPrice }}, {new: true}, function(err, doc){
+      if(err){
+          console.log("Something wrong when updating data!");
+      }
+      res.redirect('/');
+  })
+});
+
+router.get('/add-to-cart/:id/:price', function(req, res, next) {
+  var serviceId = req.params.id;
+
+
+  var housewashPrice = req.params.price;
+
+  var cart = new Cart(req.session.cart ? req.session.cart : {});
+
+
+
+  Service.findById(serviceId, function(err, service) {
+    if (err) {
+        return res.redirect('/');
+    }
+    if(service.jobTitle == 'housewash'){
+      cart.add(service,  housewashPrice);
+      req.session.cart = cart;
+      console.log(req.session.cart);
+      res.redirect('/');
+    }else{
+      cart.add(service,  service.id);
+      req.session.cart = cart;
+      console.log(req.session.cart);
+      res.redirect('/');
+    };
+
+  });
+});
+
+router.get('/reduce/:id/:price', function(req, res, next) {
+  var housewashPrice = req.params.price;
+
+
+  var serviceId = req.params.id;
+
+  var cart = new Cart(req.session.cart ? req.session.cart : {});
+
+  Service.findById(serviceId, function(err, service) {
+    if (err) {
+        return res.redirect('/');
+    }
+    if(service.jobTitle == 'housewash'){
+
+      cart.reduceByOne(service.price);
+      req.session.cart = cart;
+
+      res.redirect('/shopping-cart');
+    }else{
+      cart.reduceByOne(serviceId);
+      req.session.cart = cart;
+
+      res.redirect('/shopping-cart');
+    };
+  });
+});
+
+router.get('/remove/:id/:price', function(req, res, next) {
+  var housewashPrice = req.params.price;
+
   var serviceId = req.params.id;
   var cart = new Cart(req.session.cart ? req.session.cart : {});
 
@@ -27,29 +99,20 @@ router.get('/add-to-chart/:id', function(req, res, next) {
     if (err) {
         return res.redirect('/');
     }
-    cart.add(service,  service.id);
-    req.session.cart = cart;
-    console.log(req.session.cart);
-    res.redirect('/');
+    if(service.jobTitle == 'housewash'){
+      console.log('this is the cart items: ' + cart.items[housewashPrice].qty);
+      cart.removeItem(housewashPrice);
+      req.session.cart = cart;
+      res.redirect('/shopping-cart')
+
+
+    }else{
+      cart.removeItem(serviceId);
+      req.session.cart = cart;
+
+      res.redirect('/shopping-cart');
+    };
   });
-});
-
-router.get('/reduce/:id', function(req, res, next) {
-  var serviceId = req.params.id;
-  var cart = new Cart(req.session.cart ? req.session.cart : {});
-
-  cart.reduceByOne(serviceId);
-  req.session.cart = cart;
-  res.redirect('/shopping-cart')
-});
-
-router.get('/remove/:id', function(req, res, next) {
-  var serviceId = req.params.id;
-  var cart = new Cart(req.session.cart ? req.session.cart : {});
-
-  cart.removeItem(serviceId);
-  req.session.cart = cart;
-  res.redirect('/shopping-cart')
 });
 
 router.get('/reviews', function(req, res, next) {
@@ -80,6 +143,14 @@ router.get('/checkout', isLoggedIn, function(req, res, next) {
   var errMsg = req.flash('error')[0];
   res.render('shop/checkout', {total: cart.totalPrice, errMsg: errMsg, noError: !errMsg});
 });
+
+
+
+
+
+
+
+
 
 router.post('/checkout', isLoggedIn, async (req, res, next) => {
   if (!req.session.cart) {

@@ -13,6 +13,9 @@
     {{# each services }}
       <div class="card-deck mb-3 ">
         {{# each this }}
+
+          {{#if this.jobTitle}}
+
           <div class="card mb-4 box-shadow">
             <div class="embed-responsive embed-responsive-16by9">
               <img alt="deck" class="card-img-top embed-responsive-item" src="{{ this.imagePath }}"/>
@@ -22,9 +25,61 @@
               <ul class="list-unstyled mt-3 mb-4">
                 <li>{{ this.description }}</li>
               </ul>
-              <a href="/add-to-cart/{{this._id}}" class="btn mt-auto btn-success " role="button">Add to Shopping Cart</a>
+
+                  <form method="POST" action="/changePrice" >
+                      <div class="form-group text-center " >
+
+                        <select name="price" class="form-select" id="price" aria-describedby="priceHelp" aria-label="Default select ">
+                            <option id="100" value="100" selected="selected">1000 sqft or less</option>
+                              <option id="250" value="250">1001 - 2000 sqft</option>
+                              <option id="350" value="350">2001 3000 sqft </option>
+                              <option id="450" value="450">3001 - 4000 sqft</option>
+                          </select>
+                          <small id="priceHelp" class="form-text text-muted">Select Your House Size</small>
+                          </div>
+                          <div class="text-center">
+                          <button type="submit" class="btn btn-primary mb-2 text-center ">Get Estimate</button>                      </div>
+                    </form>
+
+
+                    <script type="text/javascript">
+                        document.getElementById('price').onchange = function() {
+                            localStorage.setItem('selectedtem', document.getElementById('price').value);
+                        };
+                        if (localStorage.getItem('selectedtem')) {
+                            document.getElementById(localStorage.getItem('selectedtem')).selected = true;
+                        }
+                    </script>
+
+
+                <br>
+
+              <a href="/add-to-cart/{{this._id}}/{{this.price}}" class="btn mt-auto btn-success " role="button">Add to Shopping Cart</a>
             </div>
           </div>
+
+          {{else}}
+
+          <div class="card mb-4 box-shadow">
+            <div class="embed-responsive embed-responsive-16by9">
+              <img alt="deck" class="card-img-top embed-responsive-item" src="{{ this.imagePath }}"/>
+            </div>
+            <div class="card-body d-flex flex-column">
+              <h1 class="card-title pricing-card-title text-center">${{ this.price }}</h1>
+              <ul class="list-unstyled mt-3 mb-4">
+                <li>{{ this.description }}</li>
+              </ul>
+
+
+
+                <br>
+
+              <a href="/add-to-cart/{{this._id}}/{{this.price}}" class="btn mt-auto btn-success " role="button">Add to Shopping Cart</a>
+            </div>
+          </div>
+
+
+            {{/if}}
           {{/each}}
       </div>
       {{/each}}
